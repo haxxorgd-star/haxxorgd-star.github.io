@@ -146,7 +146,7 @@
   ⚠️ Calculations include <strong>Fast Clicker Gamepass</strong> multiplier.
 </div>
 
-<h3 id="insertedMode" class="mode">⚡ Inserted Energy Mode</h3>
+<h3 id="insertedMode" class="mode">⚡ Energy per Click Mode</h3>
 <label for="energyInput">Energy per Click:</label>
 <input type="text" id="energyInput" placeholder="e.g. 44M, 1K, 2SpQDR">
 
@@ -185,7 +185,7 @@ units.forEach((unit, index) => {
 const insertedModeHeader = document.getElementById("insertedMode");
 const targetModeHeader = document.getElementById("targetMode");
 
-// Parse energy with exact, case-insensitive unit match
+// Parse energy
 function parseEnergy(input) {
   input = input.trim();
   const match = input.match(/^([\d.]+)\s*([a-zA-Z]+)?$/);
@@ -194,7 +194,7 @@ function parseEnergy(input) {
   const unit = match[2] ? match[2].toLowerCase() : "";
   if (!unit) return number;
   if (unitMap.hasOwnProperty(unit)) return number * unitMap[unit];
-  return 0; // unknown unit treated as 0
+  return 0;
 }
 
 // Format units
@@ -220,7 +220,6 @@ document.getElementById("calcBtn").addEventListener("click", () => {
   insertedModeHeader.classList.remove("active");
   targetModeHeader.classList.remove("active");
 
-  // Target mode
   if (insertedEnergy > 0 && targetEnergy > 0) {
     targetModeHeader.classList.add("active");
     const energyPerSecond = insertedEnergy * 5.5;
@@ -233,7 +232,6 @@ document.getElementById("calcBtn").addEventListener("click", () => {
     return;
   }
 
-  // Inserted energy mode
   if (insertedEnergy > 0 && seconds > 0) {
     insertedModeHeader.classList.add("active");
     const energyPerSecond = insertedEnergy * 5.5;
@@ -248,7 +246,7 @@ document.getElementById("calcBtn").addEventListener("click", () => {
   output.innerHTML = "⚠️ Please enter valid values.";
 });
 
-// Collapsible supported numbers
+// Collapsible units
 const coll = document.getElementsByClassName("collapsible")[0];
 coll.addEventListener("click", function() {
   const content = document.getElementById("unitList");
@@ -257,4 +255,3 @@ coll.addEventListener("click", function() {
 </script>
 </body>
 </html>
-
