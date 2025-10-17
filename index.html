@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energy Calculator</title>
+<style>
+  body {
+    font-family: "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(circle at center, #0a1a2f 0%, #000814 100%);
+    color: #cde4ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  h2 {
+    color: #66b2ff;
+    text-shadow: 0 0 10px #0077ff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  label {
+    margin-top: 10px;
+    font-size: 1.1rem;
+  }
+
+  input {
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #cde4ff;
+    outline: none;
+    transition: box-shadow 0.2s ease;
+    width: 200px;
+    text-align: center;
+  }
+
+  input:focus {
+    box-shadow: 0 0 10px #3399ff;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    color: #fff;
+    background: linear-gradient(90deg, #0066ff, #00ccff);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #3399ff;
+  }
+
+  #output {
+    margin-top: 25px;
+    font-size: 1.3rem;
+    text-align: center;
+    background: rgba(0, 30, 60, 0.4);
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+  }
+
+  strong {
+    color: #00bfff;
+    text-shadow: 0 0 10px #00bfff;
+  }
+</style>
+</head>
+<body>
+
+<h2>🔹 Energy Calculator 🔹</h2>
+
+<label for="energyInput">Inserted Energy:</label>
+<input type="text" id="energyInput" placeholder="e.g. 44dtg, 1utg, 2tstg">
+
+<label for="secondsInput">Time (seconds):</label>
+<input type="number" id="secondsInput" value="1" min="1">
+
+<button id="calcBtn">Calculate</button>
+
+<div id="output">Enter your energy and time to begin.</div>
+
+<script>
+function parseEnergy(input) {
+  input = input.trim().toLowerCase();
+  const num = parseFloat(input);
+  if (isNaN(num)) return 0;
+
+  if (input.endsWith("tstg")) return num * 1e7;
+  if (input.endsWith("dtg")) return num * 1e4;
+  if (input.endsWith("utg")) return num * 10;
+  return num; // assume plain number = base units
+}
+
+function formatUnits(value) {
+  if (value >= 1e7) return (value / 1e7).toFixed(3) + " tstg";
+  if (value >= 1e4) return (value / 1e4).toFixed(3) + " dtg";
+  return (value / 10).toFixed(3) + " utg";
+}
+
+document.getElementById("calcBtn").addEventListener("click", () => {
+  const rawEnergy = document.getElementById("energyInput").value;
+  const seconds = parseInt(document.getElementById("secondsInput").value);
+  const insertedEnergy = parseEnergy(rawEnergy);
+
+  const output = document.getElementById("output");
+
+  if (insertedEnergy === 0 || isNaN(seconds)) {
+    output.innerHTML = "⚠️ Please enter valid values.";
+    return;
+  }
+
+  const energyPerSecond = insertedEnergy * 5.5;
+  const totalEnergy = energyPerSecond * seconds;
+
+  output.innerHTML = `
+    ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
+    ⏱️ <strong>Energy after ${seconds} second(s):</strong> ${formatUnits(totalEnergy)}
+  `;
+});
+</script>
+
+</body>
+</html>
