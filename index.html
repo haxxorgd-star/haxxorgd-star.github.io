@@ -20,12 +20,12 @@ body {
 .top-buttons {
   display: flex;
   gap: 25px;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
 .top-buttons button {
-  padding: 16px 32px;
-  font-size: 1.4rem;
+  padding: 18px 36px;
+  font-size: 1.45rem;
   border: none;
   border-radius: 16px;
   cursor: pointer;
@@ -81,6 +81,14 @@ input.damage-input { box-shadow: 0 0 12px #ff3333; }
 input:focus { box-shadow: 0 0 16px #3399ff; }
 input.damage-input:focus { box-shadow: 0 0 16px #ff3333; }
 
+/* Remove number input arrows */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] { -moz-appearance: textfield; }
+
 button.calc-btn { padding: 12px 24px; font-size: 1.15rem; border-radius: 14px; cursor: pointer; margin-top: 8px; }
 
 #output, #damageOutput {
@@ -96,8 +104,39 @@ button.calc-btn { padding: 12px 24px; font-size: 1.15rem; border-radius: 14px; c
 
 .damage-output { color: #ff5555; text-shadow: 0 0 4px #ff8888; }
 
-.collapsible { background-color: rgba(0,30,60,0.4); color: #cde4ff; cursor: pointer; padding: 10px 16px; width: 100%; max-width: 380px; border-radius: 14px; font-size: 1.05rem; text-align: center; margin-top: 14px; }
-.content { padding: 10px 16px; display: none; overflow: auto; max-height: 240px; background-color: rgba(0,30,60,0.3); border-radius: 14px; margin-top: 6px; font-size: 1rem; text-align: center; }
+.collapsible { 
+  background-color: rgba(0,30,60,0.4); 
+  color: #cde4ff; 
+  cursor: pointer; 
+  padding: 10px 16px; 
+  width: 100%; 
+  max-width: 600px; 
+  border-radius: 14px; 
+  font-size: 1.05rem; 
+  text-align: center; 
+  margin-top: 20px; 
+}
+
+.content {
+  padding: 16px 18px 12px 18px;
+  max-width: 600px; 
+  display: none;
+  overflow-x: auto;
+  overflow-y: auto;
+  white-space: nowrap;
+  max-height: 320px; 
+  background-color: rgba(0,30,60,0.3);
+  border-radius: 14px;
+  margin-top: 6px;
+  font-size: 1.05rem; 
+  text-align: left; 
+  line-height: 1.5; 
+}
+
+.content::-webkit-scrollbar { height: 8px; }
+.content::-webkit-scrollbar-thumb { background: rgba(0,102,255,0.5); border-radius: 4px; }
+.content::-webkit-scrollbar-track { background: rgba(0,30,60,0.2); }
+
 </style>
 </head>
 <body>
