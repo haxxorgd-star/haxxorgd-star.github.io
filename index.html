@@ -39,7 +39,7 @@
     color: #cde4ff;
     outline: none;
     transition: box-shadow 0.2s ease;
-    width: 200px;
+    width: 220px;
     text-align: center;
   }
 
@@ -85,7 +85,7 @@
 <h2>🔹 Energy Calculator 🔹</h2>
 
 <label for="energyInput">Inserted Energy:</label>
-<input type="text" id="energyInput" placeholder="e.g. 44dtg, 1utg, 2tstg">
+<input type="text" id="energyInput" placeholder="e.g. 44M, 1K, 2SpQDR">
 
 <label for="secondsInput">Time (seconds):</label>
 <input type="number" id="secondsInput" value="1" min="1">
@@ -95,21 +95,44 @@
 <div id="output">Enter your energy and time to begin.</div>
 
 <script>
+// List of units in order
+const units = [
+"K","M","B","T","Qd","Qn","Sx","Sp","O","N","De",
+"Ud","Dd","TdD","QdD","QnD","SxD","SpD","OcD","NvD",
+"Vgn","UvG","DvG","Tvg","QtV","QnV","SeV","SpG","OvG","NvG","TgN",
+"UTG","DTG","TsTG","QtTG","QnTG","SsTG","SpTG","OcTG","NoTG",
+"QDDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","SxQDR","SpQDR"
+];
+
+// Map units to powers of 10
+const unitMap = {};
+units.forEach((unit, index) => {
+  unitMap[unit.toLowerCase()] = Math.pow(10, 3*(index+1));
+});
+
+// Parse input like "1.5M" or "2SpQDR"
 function parseEnergy(input) {
   input = input.trim().toLowerCase();
-  const num = parseFloat(input);
-  if (isNaN(num)) return 0;
+  let number = parseFloat(input);
+  if (isNaN(number)) return 0;
 
-  if (input.endsWith("tstg")) return num * 1e7;
-  if (input.endsWith("dtg")) return num * 1e4;
-  if (input.endsWith("utg")) return num * 10;
-  return num; // assume plain number = base units
+  for (let unit in unitMap) {
+    if (input.endsWith(unit)) {
+      return number * unitMap[unit];
+    }
+  }
+  return number; // no unit
 }
 
+// Format number using largest possible unit
 function formatUnits(value) {
-  if (value >= 1e7) return (value / 1e7).toFixed(3) + " tstg";
-  if (value >= 1e4) return (value / 1e4).toFixed(3) + " dtg";
-  return (value / 10).toFixed(3) + " utg";
+  for (let i = units.length - 1; i >= 0; i--) {
+    let unitValue = Math.pow(10, 3*(i+1));
+    if (value >= unitValue) {
+      return (value / unitValue).toFixed(3) + " " + units[i];
+    }
+  }
+  return value.toFixed(3);
 }
 
 document.getElementById("calcBtn").addEventListener("click", () => {
