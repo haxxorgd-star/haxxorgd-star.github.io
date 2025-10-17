@@ -65,7 +65,12 @@
     outline: none;
     width: 220px;
     text-align: center;
+    box-shadow: 0 0 10px #3399ff; /* always blue glow */
     transition: box-shadow 0.2s ease;
+  }
+
+  input:focus {
+    box-shadow: 0 0 15px #3399ff;
   }
 
   button {
@@ -185,16 +190,14 @@ function parseEnergy(input) {
   input = input.trim();
   const match = input.match(/^([\d.]+)\s*([a-zA-Z]+)?$/);
   if (!match) return 0;
-
   const number = parseFloat(match[1]);
   const unit = match[2] ? match[2].toLowerCase() : "";
-
-  if (!unit) return number; // no unit, raw number
+  if (!unit) return number;
   if (unitMap.hasOwnProperty(unit)) return number * unitMap[unit];
-  return 0; // unknown unit
+  return 0; // unknown unit treated as 0
 }
 
-// Format
+// Format units
 function formatUnits(value) {
   for (let i = units.length - 1; i >= 0; i--) {
     let unitValue = Math.pow(10, 3*(i+1));
@@ -205,47 +208,15 @@ function formatUnits(value) {
   return value.toFixed(3);
 }
 
-// Highlight invalid units dynamically
-function validateUnit(input, inputElement) {
-  input = input.trim();
-  if (input === "") {
-    inputElement.style.boxShadow = "0 0 10px #3399ff"; // normal blue highlight for empty
-    return true;
-  }
-
-  const match = input.match(/^([\d.]+)\s*([a-zA-Z]+)?$/);
-  if (!match) {
-    inputElement.style.boxShadow = "0 0 10px red";
-    return false;
-  }
-
-  const unit = match[2] ? match[2].toLowerCase() : "";
-  if (unit && !unitMap.hasOwnProperty(unit)) {
-    inputElement.style.boxShadow = "0 0 10px red";
-    return false;
-  }
-
-  inputElement.style.boxShadow = "0 0 10px #3399ff";
-  return true;
-}
-
-// Add event listeners for dynamic validation
-const energyInputEl = document.getElementById("energyInput");
-const targetInputEl = document.getElementById("targetEnergy");
-[energyInputEl, targetInputEl].forEach(el => {
-  el.addEventListener("input", () => validateUnit(el.value, el));
-});
-
 document.getElementById("calcBtn").addEventListener("click", () => {
-  const rawEnergy = energyInputEl.value;
+  const rawEnergy = document.getElementById("energyInput").value;
   const seconds = parseInt(document.getElementById("secondsInput").value);
-  const targetEnergyRaw = targetInputEl.value;
+  const targetEnergyRaw = document.getElementById("targetEnergy").value;
   const output = document.getElementById("output");
 
   const insertedEnergy = parseEnergy(rawEnergy);
   const targetEnergy = parseEnergy(targetEnergyRaw);
 
-  // Reset highlights
   insertedModeHeader.classList.remove("active");
   targetModeHeader.classList.remove("active");
 
@@ -286,4 +257,3 @@ coll.addEventListener("click", function() {
 </script>
 </body>
 </html>
-
