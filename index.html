@@ -208,16 +208,23 @@ function formatUnits(value) {
 // Highlight invalid units dynamically
 function validateUnit(input, inputElement) {
   input = input.trim();
+  if (input === "") {
+    inputElement.style.boxShadow = "0 0 10px #3399ff"; // normal blue highlight for empty
+    return true;
+  }
+
   const match = input.match(/^([\d.]+)\s*([a-zA-Z]+)?$/);
   if (!match) {
     inputElement.style.boxShadow = "0 0 10px red";
     return false;
   }
+
   const unit = match[2] ? match[2].toLowerCase() : "";
   if (unit && !unitMap.hasOwnProperty(unit)) {
     inputElement.style.boxShadow = "0 0 10px red";
     return false;
   }
+
   inputElement.style.boxShadow = "0 0 10px #3399ff";
   return true;
 }
@@ -279,3 +286,4 @@ coll.addEventListener("click", function() {
 </script>
 </body>
 </html>
+
