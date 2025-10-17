@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 100vh;
     margin: 0;
     padding: 20px;
@@ -50,7 +50,6 @@
     background: rgba(255, 255, 255, 0.1);
     color: #cde4ff;
     outline: none;
-    transition: box-shadow 0.2s ease;
     width: 220px;
     text-align: center;
   }
@@ -91,7 +90,7 @@
     color: #cde4ff;
     cursor: pointer;
     padding: 10px 15px;
-    width: 220px;
+    width: 240px;
     border: none;
     border-radius: 12px;
     text-align: center;
@@ -129,23 +128,30 @@
 <h2>🔹 Energy Calculator 🔹</h2>
 
 <div class="notice">
-  ⚠️ This calculation uses <strong>Fast Clicker Gamepass</strong> bonuses.
+  ⚠️ Calculations include <strong>Fast Clicker Gamepass</strong> multiplier.
 </div>
 
-<label for="energyInput">Inserted Energy:</label>
+<!-- Section 1: Inserted Energy -->
+<h3>⚡ Inserted Energy Mode</h3>
+<label for="energyInput">Energy Per Click:</label>
 <input type="text" id="energyInput" placeholder="e.g. 44M, 1K, 2SpQDR">
 
 <label for="secondsInput">Time (seconds):</label>
 <input type="number" id="secondsInput" value="1" min="1">
 
+<!-- Section 2: Desired Energy -->
+<h3>🎯 Target Energy Mode</h3>
+<label for="targetEnergy">Desired Target Energy:</label>
+<input type="text" id="targetEnergy" placeholder="e.g. 1T, 500B">
+
 <button id="calcBtn">Calculate</button>
 
-<div id="output">Enter your energy and time to begin.</div>
+<div id="output">Enter your values to begin.</div>
 
 <!-- Collapsible supported numbers list -->
 <button type="button" class="collapsible">Show/Hide Supported Numbers</button>
 <div class="content" id="unitList">
-  K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR
+K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR
 </div>
 
 <script>
@@ -175,7 +181,7 @@ function parseEnergy(input) {
       return number * unitMap[unit];
     }
   }
-  return number; // no unit
+  return number;
 }
 
 // Format output
@@ -189,38 +195,46 @@ function formatUnits(value) {
   return value.toFixed(3);
 }
 
-// Calculate button
 document.getElementById("calcBtn").addEventListener("click", () => {
   const rawEnergy = document.getElementById("energyInput").value;
+  const targetEnergyRaw = document.getElementById("targetEnergy").value;
   const seconds = parseInt(document.getElementById("secondsInput").value);
-  const insertedEnergy = parseEnergy(rawEnergy);
-
   const output = document.getElementById("output");
 
-  if (insertedEnergy === 0 || isNaN(seconds)) {
-    output.innerHTML = "⚠️ Please enter valid values.";
+  const insertedEnergy = parseEnergy(rawEnergy);
+  const targetEnergy = parseEnergy(targetEnergyRaw);
+
+  // Case 1: inserted energy mode
+  if (insertedEnergy > 0 && seconds > 0 && !targetEnergyRaw) {
+    const energyPerSecond = insertedEnergy * 5.5;
+    const totalEnergy = energyPerSecond * seconds;
+    output.innerHTML = `
+      ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
+      ⏱️ <strong>Energy after ${seconds} second(s):</strong> ${formatUnits(totalEnergy)}
+    `;
     return;
   }
 
-  const energyPerSecond = insertedEnergy * 5.5;
-  const totalEnergy = energyPerSecond * seconds;
+  // Case 2: desired target mode
+  if (insertedEnergy > 0 && targetEnergy > 0) {
+    const energyPerSecond = insertedEnergy * 5.5;
+    const timeRequired = targetEnergy / energyPerSecond;
+    output.innerHTML = `
+      🎯 <strong>Target Energy:</strong> ${formatUnits(targetEnergy)}<br>
+      ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
+      ⏱️ <strong>Time required:</strong> ${timeRequired.toFixed(2)} seconds
+    `;
+    return;
+  }
 
-  output.innerHTML = `
-    ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
-    ⏱️ <strong>Energy after ${seconds} second(s):</strong> ${formatUnits(totalEnergy)}
-  `;
+  output.innerHTML = "⚠️ Please enter valid values.";
 });
 
 // Collapsible functionality
 const coll = document.getElementsByClassName("collapsible")[0];
 coll.addEventListener("click", function() {
-  this.classList.toggle("active");
   const content = document.getElementById("unitList");
-  if (content.style.display === "block") {
-    content.style.display = "none";
-  } else {
-    content.style.display = "block";
-  }
+  content.style.display = content.style.display === "block" ? "none" : "block";
 });
 </script>
 
