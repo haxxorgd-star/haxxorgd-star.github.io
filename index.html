@@ -5,188 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Energy & Damage Calculator</title>
 <style>
-  body {
-    font-family: "Segoe UI", Roboto, sans-serif;
-    background: radial-gradient(circle at center, #0a1a2f 0%, #000814 100%);
-    color: #cde4ff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-  }
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at center, #0a1a2f 0%, #000814 100%);
+  color: #cde4ff;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .top-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+.top-buttons {
+  display: flex;
+  gap: 15px; /* more spacing */
+  margin-bottom: 20px;
+}
 
-  .top-buttons button {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
+.top-buttons button {
+  padding: 8px 20px;
+  font-size: 1.05rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
 
-  .top-buttons button:hover {
-    transform: scale(1.05);
-  }
+.top-buttons button:hover { transform: scale(1.05); }
+.active-btn { box-shadow: 0 0 12px #3399ff; }
 
-  .active-btn {
-    box-shadow: 0 0 15px #3399ff;
-  }
+.damage-btn { background: linear-gradient(90deg, #ff3300, #ff6666); color: #fff; }
+.energy-btn { background: linear-gradient(90deg, #0066ff, #00ccff); color: #fff; }
 
-  .damage-btn {
-    background: linear-gradient(90deg, #ff3300, #ff6666);
-    color: #fff;
-  }
+.section { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 600px; }
+.section.active { display: flex; }
 
-  .energy-btn {
-    background: linear-gradient(90deg, #0066ff, #00ccff);
-    color: #fff;
-  }
+h2 { margin: 0 0 10px 0; }
+.notice { font-size: 0.95rem; background: rgba(0,102,255,0.2); padding: 5px 10px; border-radius: 10px; margin-bottom: 15px; text-align: center; width: 100%; }
 
-  h2 {
-    margin-bottom: 10px;
-  }
+.inputs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 
-  h3.mode {
-    font-size: 1.3rem;
-    margin: 10px 0;
-    padding: 5px 10px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-  }
+label { font-size: 0.95rem; margin-bottom: 3px; display: block; text-align: center; }
 
-  h3.mode.active {
-    text-shadow: 0 0 10px #00ffff;
-    color: #00ffff;
-  }
+input { padding: 6px 10px; font-size: 0.9rem; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: #cde4ff; text-align: center; width: 120px; box-shadow: 0 0 8px #3399ff; }
 
-  .notice {
-    background: rgba(0, 102, 255, 0.2);
-    padding: 10px 15px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    font-size: 1rem;
-    text-align: center;
-    color: #99ccff;
-    box-shadow: 0 0 10px rgba(0, 102, 255, 0.3);
-  }
+input.damage-input { box-shadow: 0 0 8px #ff3333; }
+input:focus { box-shadow: 0 0 12px #3399ff; }
+input.damage-input:focus { box-shadow: 0 0 12px #ff3333; }
 
-  label {
-    margin-top: 10px;
-    font-size: 1.1rem;
-  }
+button.calc-btn { padding: 6px 16px; font-size: 0.95rem; border-radius: 10px; cursor: pointer; margin-top: 5px; }
 
-  input {
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #cde4ff;
-    outline: none;
-    width: 220px;
-    text-align: center;
-    box-shadow: 0 0 10px #3399ff;
-    transition: box-shadow 0.2s ease;
-  }
+#output, #damageOutput {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  text-align: center;
+  background: rgba(0,30,60,0.4);
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,150,255,0.3);
+  width: 100%;
+}
 
-  input.damage-input {
-    box-shadow: 0 0 10px #ff3333;
-  }
+.damage-output { color: #ff5555; text-shadow: 0 0 3px #ff8888; }
 
-  input:focus {
-    box-shadow: 0 0 15px #3399ff;
-  }
-
-  input.damage-input:focus {
-    box-shadow: 0 0 15px #ff3333;
-  }
-
-  button.calc-btn {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  button.calc-btn:hover {
-    transform: scale(1.05);
-  }
-
-  #output, #damageOutput {
-    margin-top: 25px;
-    font-size: 1.3rem;
-    text-align: center;
-    background: rgba(0, 30, 60, 0.4);
-    padding: 20px 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
-  }
-
-  .damage-output {
-    color: #ff5555;
-    text-shadow: 0 0 5px #ff8888;
-  }
-
-  .collapsible {
-    background-color: rgba(0,30,60,0.4);
-    color: #cde4ff;
-    cursor: pointer;
-    padding: 10px 15px;
-    width: 240px;
-    border: none;
-    border-radius: 12px;
-    text-align: center;
-    outline: none;
-    font-size: 1rem;
-    margin-top: 15px;
-    box-shadow: 0 0 10px rgba(0,150,255,0.3);
-    transition: background 0.2s ease;
-  }
-
-  .collapsible:hover {
-    background-color: rgba(0,30,60,0.6);
-  }
-
-  .content {
-    padding: 10px 15px;
-    display: none;
-    overflow: hidden;
-    background-color: rgba(0,30,60,0.3);
-    border-radius: 12px;
-    margin-top: 5px;
-    font-size: 0.95rem;
-    box-shadow: inset 0 0 5px rgba(0,150,255,0.2);
-    text-align: center;
-  }
-
-  .section {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-  .section.active {
-    display: flex;
-  }
-
-  strong {
-    color: #00bfff;
-    text-shadow: 0 0 10px #00bfff;
-  }
+.collapsible { background-color: rgba(0,30,60,0.4); color: #cde4ff; cursor: pointer; padding: 6px 12px; width: 100%; max-width: 300px; border-radius: 10px; font-size: 0.9rem; text-align: center; margin-top: 10px; }
+.content { padding: 6px 12px; display: none; overflow: auto; max-height: 200px; background-color: rgba(0,30,60,0.3); border-radius: 10px; margin-top: 3px; font-size: 0.85rem; text-align: center; }
 </style>
 </head>
 <body>
@@ -199,28 +89,40 @@
 <!-- Energy Calculator Section -->
 <div id="energySection" class="section active">
   <h2>🔹 Energy Calculator 🔹</h2>
-  <div class="notice">
-    ⚠️ Calculations include <strong>Fast Clicker Gamepass</strong> multiplier.
+  <div class="notice">⚠️ Includes <strong>Fast Clicker Gamepass</strong> multiplier.</div>
+
+  <div class="inputs-row">
+    <div>
+      <label>Energy per Click</label>
+      <input type="text" id="energyInput" placeholder="44M">
+    </div>
+    <div>
+      <label>Time (s)</label>
+      <input type="number" id="secondsInput" value="1" min="1">
+    </div>
   </div>
 
-  <h3 id="insertedMode" class="mode">⚡ Energy per Click Mode</h3>
-  <label for="energyInput">Energy per Click:</label>
-  <input type="text" id="energyInput" placeholder="e.g. 44M, 1K, 2SpQDR">
+  <div class="inputs-row">
+    <div>
+      <label>Target Energy</label>
+      <input type="text" id="targetEnergy" placeholder="1T">
+    </div>
+    <div>
+      <label>Target Rank</label>
+      <input type="number" id="targetRank" min="1" placeholder="116">
+    </div>
+  </div>
 
-  <label for="secondsInput">Time (seconds):</label>
-  <input type="number" id="secondsInput" value="1" min="1">
+  <div class="inputs-row">
+    <button id="calcBtn" class="calc-btn energy-btn">Calculate Energy/Target</button>
+    <button id="calcRankBtn" class="calc-btn energy-btn">Calculate Rank Up</button>
+  </div>
 
-  <h3 id="targetMode" class="mode">🎯 Target Energy Mode</h3>
-  <label for="targetEnergy">Desired Target Energy:</label>
-  <input type="text" id="targetEnergy" placeholder="e.g. 1T, 500B">
-
-  <button id="calcBtn" class="calc-btn energy-btn">Calculate</button>
-
-  <div id="output">Enter your values to begin.</div>
+  <div id="output">Enter values to calculate.</div>
 
   <button type="button" class="collapsible">Show/Hide Supported Numbers</button>
   <div class="content" id="unitList">
-  K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR, OQDDR, NQDDR, qQGNT, uQGNT, dQGNT, tQGNT
+    K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR, OQDDR, NQDDR, qQGNT, uQGNT, dQGNT, tQGNT
   </div>
 </div>
 
@@ -228,23 +130,28 @@
 <div id="damageSection" class="section">
   <h2>🩸 Damage Calculator 🩸</h2>
 
-  <label for="dpsInput">Damage per Second (DPS):</label>
-  <input type="text" id="dpsInput" class="damage-input" placeholder="e.g. 5M">
-
-  <label for="healthInput">Mob Health:</label>
-  <input type="text" id="healthInput" class="damage-input" placeholder="e.g. 100M">
+  <div class="inputs-row">
+    <div>
+      <label>DPS</label>
+      <input type="text" id="dpsInput" class="damage-input" placeholder="5M">
+    </div>
+    <div>
+      <label>Mob Health</label>
+      <input type="text" id="healthInput" class="damage-input" placeholder="100M">
+    </div>
+  </div>
 
   <button id="damageCalcBtn" class="calc-btn damage-btn">Calculate</button>
-
-  <div id="damageOutput">Enter your DPS and mob health to begin.</div>
+  <div id="damageOutput">Enter values to calculate.</div>
 
   <button type="button" class="collapsible" id="damageCollapsible">Show/Hide Supported Numbers</button>
   <div class="content" id="damageUnitList">
-  K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR, OQDDR, NQDDR, qQGNT, uQGNT, dQGNT, tQGNT
+    K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR, OQDDR, NQDDR, qQGNT, uQGNT, dQGNT, tQGNT
   </div>
+</div>
 
 <script>
-// --- Section switching ---
+// Section switching
 const energyBtn = document.getElementById("energyBtn");
 const damageBtn = document.getElementById("damageBtn");
 const energySection = document.getElementById("energySection");
@@ -256,7 +163,6 @@ energyBtn.addEventListener("click", () => {
   energyBtn.classList.add("active-btn");
   damageBtn.classList.remove("active-btn");
 });
-
 damageBtn.addEventListener("click", () => {
   damageSection.classList.add("active");
   energySection.classList.remove("active");
@@ -264,110 +170,77 @@ damageBtn.addEventListener("click", () => {
   energyBtn.classList.remove("active-btn");
 });
 
-// --- Collapsible units ---
-const collEnergy = document.getElementsByClassName("collapsible")[0];
-collEnergy.addEventListener("click", function() {
-  const content = document.getElementById("unitList");
-  content.style.display = content.style.display === "block" ? "none" : "block";
+// Collapsible units
+document.getElementsByClassName("collapsible")[0].addEventListener("click", () => {
+  const c = document.getElementById("unitList");
+  c.style.display = c.style.display === "block" ? "none" : "block";
+});
+document.getElementById("damageCollapsible").addEventListener("click", () => {
+  const c = document.getElementById("damageUnitList");
+  c.style.display = c.style.display === "block" ? "none" : "block";
 });
 
-const collDamage = document.getElementById("damageCollapsible");
-collDamage.addEventListener("click", function() {
-  const content = document.getElementById("damageUnitList");
-  content.style.display = content.style.display === "block" ? "none" : "block";
-});
-
-// --- Unit Map for Energy & Damage ---
-const units = [
-"K","M","B","T","Qd","Qn","Sx","Sp","O","N","De",
-"Ud","Dd","TdD","QdD","QnD","SxD","SpD","OcD","NvD",
-"Vgn","UvG","DvG","Tvg","QtV","QnV","SeV","SpG","OvG","NvG","TgN",
-"UTG","DTG","TsTG","QtTG","QnTG","SsTG","SpTG","OcTG","NoTG",
-"QDDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","SxQDR","SpQDR",
-"OQDDR","NQDDR","qQGNT","uQGNT","dQGNT","tQGNT"
-];
+// Units
+const units = ["K","M","B","T","Qd","Qn","Sx","Sp","O","N","De","Ud","Dd","TdD","QdD","QnD","SxD","SpD","OcD","NvD","Vgn","UvG","DvG","Tvg","QtV","QnV","SeV","SpG","OvG","NvG","TgN","UTG","DTG","TsTG","QtTG","QnTG","SsTG","SpTG","OcTG","NoTG","QDDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","SxQDR","SpQDR","OQDDR","NQDDR","qQGNT","uQGNT","dQGNT","tQGNT"];
 const unitMap = {};
-units.forEach((unit, index) => { unitMap[unit.toLowerCase()] = Math.pow(10, 3*(index+1)); });
+units.forEach((u,i)=>{ unitMap[u.toLowerCase()] = Math.pow(10,3*(i+1)); });
+function parseEnergy(input){ input=input.trim(); const m=input.match(/^([\d.]+)\s*([a-zA-Z]+)?$/); if(!m)return 0; const n=parseFloat(m[1]); const u=m[2]?m[2].toLowerCase():""; if(!u)return n; if(unitMap.hasOwnProperty(u)) return n*unitMap[u]; return 0; }
+function formatUnits(value){ for(let i=units.length-1;i>=0;i--){ let uv=Math.pow(10,3*(i+1)); if(value>=uv)return (value/uv).toFixed(3)+" "+units[i]; } return value.toFixed(3); }
 
-function parseEnergy(input) {
-  input = input.trim();
-  const match = input.match(/^([\d.]+)\s*([a-zA-Z]+)?$/);
-  if (!match) return 0;
-  const number = parseFloat(match[1]);
-  const unit = match[2] ? match[2].toLowerCase() : "";
-  if (!unit) return number;
-  if (unitMap.hasOwnProperty(unit)) return number * unitMap[unit];
-  return 0;
-}
+// Energy Calculator
+const insertedMode = document.getElementById("insertedMode");
+const targetMode = document.getElementById("targetMode");
+const rankMode = document.getElementById("rankMode");
+const rankEnergyMap = {116: parseEnergy("tstg")};
 
-function formatUnits(value) {
-  for (let i = units.length - 1; i >= 0; i--) {
-    let unitValue = Math.pow(10, 3*(i+1));
-    if (value >= unitValue) {
-      return (value / unitValue).toFixed(3) + " " + units[i];
-    }
-  }
-  return value.toFixed(3);
-}
+document.getElementById("calcBtn").addEventListener("click",()=>{
+  const rawE = document.getElementById("energyInput").value;
+  const sec = parseInt(document.getElementById("secondsInput").value);
+  const targetE = document.getElementById("targetEnergy").value;
+  const out = document.getElementById("output");
+  const ie = parseEnergy(rawE);
+  const te = parseEnergy(targetE);
 
-// --- Energy Calculator ---
-const insertedModeHeader = document.getElementById("insertedMode");
-const targetModeHeader = document.getElementById("targetMode");
-
-document.getElementById("calcBtn").addEventListener("click", () => {
-  const rawEnergy = document.getElementById("energyInput").value;
-  const seconds = parseInt(document.getElementById("secondsInput").value);
-  const targetEnergyRaw = document.getElementById("targetEnergy").value;
-  const output = document.getElementById("output");
-
-  const insertedEnergy = parseEnergy(rawEnergy);
-  const targetEnergy = parseEnergy(targetEnergyRaw);
-
-  insertedModeHeader.classList.remove("active");
-  targetModeHeader.classList.remove("active");
-
-  if (insertedEnergy > 0 && targetEnergy > 0) {
-    targetModeHeader.classList.add("active");
-    const energyPerSecond = insertedEnergy * 5.5;
-    const timeRequired = targetEnergy / energyPerSecond;
-    output.innerHTML = `
-      🎯 <strong>Target Energy:</strong> ${formatUnits(targetEnergy)}<br>
-      ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
-      ⏱️ <strong>Time required:</strong> ${timeRequired.toFixed(2)} seconds
-    `;
+  if(ie>0 && te>0){
+    const eps = ie*5.5;
+    const time = te/eps;
+    out.innerHTML = `🎯 <strong>Target Energy:</strong> ${formatUnits(te)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time required:</strong> ${time.toFixed(2)} s`;
     return;
   }
-
-  if (insertedEnergy > 0 && seconds > 0) {
-    insertedModeHeader.classList.add("active");
-    const energyPerSecond = insertedEnergy * 5.5;
-    const totalEnergy = energyPerSecond * seconds;
-    output.innerHTML = `
-      ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
-      ⏱️ <strong>Energy after ${seconds} second(s):</strong> ${formatUnits(totalEnergy)}
-    `;
+  if(ie>0 && sec>0){
+    const eps = ie*5.5;
+    const total = eps*sec;
+    out.innerHTML = `⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Energy after ${sec} s:</strong> ${formatUnits(total)}`;
     return;
   }
-
-  output.innerHTML = "⚠️ Please enter valid values.";
+  out.innerHTML="⚠️ Enter valid values.";
 });
 
-// --- Damage Calculator ---
-document.getElementById("damageCalcBtn").addEventListener("click", () => {
-  const dpsRaw = document.getElementById("dpsInput").value;
-  const healthRaw = document.getElementById("healthInput").value;
-  const output = document.getElementById("damageOutput");
+document.getElementById("calcRankBtn").addEventListener("click",()=>{
+  const r = parseInt(document.getElementById("targetRank").value);
+  const epc = parseEnergy(document.getElementById("energyInput").value);
+  const out = document.getElementById("output");
 
-  const dps = parseEnergy(dpsRaw);
-  const health = parseEnergy(healthRaw);
+  if(!rankEnergyMap[r]){ out.innerHTML="⚠️ Rank energy not defined yet."; return; }
+  if(epc<=0){ out.innerHTML="⚠️ Enter valid Energy per Click."; return; }
 
-  if (dps > 0 && health > 0) {
-    const timeToKill = health / dps;
-    output.innerHTML = `🩸 <strong class="damage-output">Time to kill:</strong> <span class="damage-output">${timeToKill.toFixed(2)} seconds</span>`;
+  const eps = epc*5.5;
+  const req = rankEnergyMap[r];
+  const time = req/eps;
+  out.innerHTML = `🏆 <strong>Rank ${r} Energy Required:</strong> ${formatUnits(req)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time to reach Rank ${r}:</strong> ${time.toFixed(2)} s`;
+});
+
+// Damage Calculator
+document.getElementById("damageCalcBtn").addEventListener("click",()=>{
+  const dps = parseEnergy(document.getElementById("dpsInput").value);
+  const health = parseEnergy(document.getElementById("healthInput").value);
+  const out = document.getElementById("damageOutput");
+  if(dps>0 && health>0){
+    const t = health/dps;
+    out.innerHTML=`🩸 <strong class="damage-output">Time to kill:</strong> <span class="damage-output">${t.toFixed(2)} s</span>`;
     return;
   }
-
-  output.innerHTML = "⚠️ Please enter valid DPS and mob health.";
+  out.innerHTML="⚠️ Enter valid DPS and mob health.";
 });
 </script>
 </body>
