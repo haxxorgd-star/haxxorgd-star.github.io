@@ -13,15 +13,27 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
   }
 
   h2 {
     color: #66b2ff;
     text-shadow: 0 0 10px #0077ff;
     font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .notice {
+    background: rgba(0, 102, 255, 0.2);
+    padding: 10px 15px;
+    border-radius: 12px;
     margin-bottom: 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: #99ccff;
+    box-shadow: 0 0 10px rgba(0, 102, 255, 0.3);
   }
 
   label {
@@ -74,6 +86,38 @@
     box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
   }
 
+  .collapsible {
+    background-color: rgba(0,30,60,0.4);
+    color: #cde4ff;
+    cursor: pointer;
+    padding: 10px 15px;
+    width: 220px;
+    border: none;
+    border-radius: 12px;
+    text-align: center;
+    outline: none;
+    font-size: 1rem;
+    margin-top: 15px;
+    box-shadow: 0 0 10px rgba(0,150,255,0.3);
+    transition: background 0.2s ease;
+  }
+
+  .collapsible:hover {
+    background-color: rgba(0,30,60,0.6);
+  }
+
+  .content {
+    padding: 10px 15px;
+    display: none;
+    overflow: hidden;
+    background-color: rgba(0,30,60,0.3);
+    border-radius: 12px;
+    margin-top: 5px;
+    font-size: 0.95rem;
+    box-shadow: inset 0 0 5px rgba(0,150,255,0.2);
+    text-align: center;
+  }
+
   strong {
     color: #00bfff;
     text-shadow: 0 0 10px #00bfff;
@@ -83,6 +127,10 @@
 <body>
 
 <h2>🔹 Energy Calculator 🔹</h2>
+
+<div class="notice">
+  ⚠️ This calculation uses <strong>Fast Clicker Gamepass</strong> bonuses.
+</div>
 
 <label for="energyInput">Inserted Energy:</label>
 <input type="text" id="energyInput" placeholder="e.g. 44M, 1K, 2SpQDR">
@@ -94,8 +142,14 @@
 
 <div id="output">Enter your energy and time to begin.</div>
 
+<!-- Collapsible supported numbers list -->
+<button type="button" class="collapsible">Show/Hide Supported Numbers</button>
+<div class="content" id="unitList">
+  K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR
+</div>
+
 <script>
-// List of units in order
+// Units list
 const units = [
 "K","M","B","T","Qd","Qn","Sx","Sp","O","N","De",
 "Ud","Dd","TdD","QdD","QnD","SxD","SpD","OcD","NvD",
@@ -110,7 +164,7 @@ units.forEach((unit, index) => {
   unitMap[unit.toLowerCase()] = Math.pow(10, 3*(index+1));
 });
 
-// Parse input like "1.5M" or "2SpQDR"
+// Parse input
 function parseEnergy(input) {
   input = input.trim().toLowerCase();
   let number = parseFloat(input);
@@ -124,7 +178,7 @@ function parseEnergy(input) {
   return number; // no unit
 }
 
-// Format number using largest possible unit
+// Format output
 function formatUnits(value) {
   for (let i = units.length - 1; i >= 0; i--) {
     let unitValue = Math.pow(10, 3*(i+1));
@@ -135,6 +189,7 @@ function formatUnits(value) {
   return value.toFixed(3);
 }
 
+// Calculate button
 document.getElementById("calcBtn").addEventListener("click", () => {
   const rawEnergy = document.getElementById("energyInput").value;
   const seconds = parseInt(document.getElementById("secondsInput").value);
@@ -154,6 +209,18 @@ document.getElementById("calcBtn").addEventListener("click", () => {
     ⚡ <strong>Energy per second:</strong> ${formatUnits(energyPerSecond)}<br>
     ⏱️ <strong>Energy after ${seconds} second(s):</strong> ${formatUnits(totalEnergy)}
   `;
+});
+
+// Collapsible functionality
+const coll = document.getElementsByClassName("collapsible")[0];
+coll.addEventListener("click", function() {
+  this.classList.toggle("active");
+  const content = document.getElementById("unitList");
+  if (content.style.display === "block") {
+    content.style.display = "none";
+  } else {
+    content.style.display = "block";
+  }
 });
 </script>
 
