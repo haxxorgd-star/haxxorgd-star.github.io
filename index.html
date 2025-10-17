@@ -177,6 +177,7 @@ button.calc-btn { padding: 12px 24px; font-size: 1.15rem; border-radius: 14px; c
     <div class="inputs-row">
       <div><label>Energy per Click</label><input type="text" id="rankEnergy" placeholder="44M"></div>
       <div><label>Target Rank</label><input type="number" id="rankInput" min="1" placeholder="116"></div>
+      <div><label>Current Energy</label><input type="text" id="currentEnergy" placeholder="0"></div>
     </div>
     <button id="calcRank" class="calc-btn energy-btn">Calculate</button>
   </div>
@@ -248,11 +249,31 @@ function formatUnits(value){ for(let i=units.length-1;i>=0;i--){ let uv=Math.pow
 // Energy Calculations
 document.getElementById("calcPerClick").addEventListener("click",()=>{ const e=parseEnergy(document.getElementById("pcEnergy").value); const t=parseFloat(document.getElementById("pcTime").value); const out=document.getElementById("output"); if(e>0 && t>0){ const eps=e*5.5; const total=eps*t; out.innerHTML=`⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Energy after ${t} s:</strong> ${formatUnits(total)}`; return;} out.innerHTML="⚠️ Enter valid values."; });
 document.getElementById("calcTarget").addEventListener("click",()=>{ const e=parseEnergy(document.getElementById("teEnergy").value); const target=parseEnergy(document.getElementById("targetEnergyInput").value); const out=document.getElementById("output"); if(e>0 && target>0){ const eps=e*5.5; const time=target/eps; out.innerHTML=`🎯 <strong>Target Energy:</strong> ${formatUnits(target)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time required:</strong> ${time.toFixed(2)} s`; return;} out.innerHTML="⚠️ Enter valid values."; });
+
+// Rank Up with Current Energy
 const rankEnergyMap={116:parseEnergy("30tstg")};
-document.getElementById("calcRank").addEventListener("click",()=>{ const r=parseInt(document.getElementById("rankInput").value); const e=parseEnergy(document.getElementById("rankEnergy").value); const out=document.getElementById("output"); if(!rankEnergyMap[r]){ out.innerHTML="⚠️ Rank energy not defined."; return; } if(e<=0){ out.innerHTML="⚠️ Enter valid Energy per Click."; return; } const eps=e*5.5; const req=rankEnergyMap[r]; const time=req/eps; out.innerHTML=`🏆 <strong>Rank ${r} Energy Required:</strong> ${formatUnits(req)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time to reach Rank ${r}:</strong> ${time.toFixed(2)} s`; });
+document.getElementById("calcRank").addEventListener("click",()=>{ 
+  const r=parseInt(document.getElementById("rankInput").value); 
+  const e=parseEnergy(document.getElementById("rankEnergy").value); 
+  const current=parseEnergy(document.getElementById("currentEnergy").value); 
+  const out=document.getElementById("output"); 
+
+  if(!rankEnergyMap[r]){ out.innerHTML="⚠️ Rank energy not defined."; return; }
+  if(e<=0){ out.innerHTML="⚠️ Enter valid Energy per Click."; return; }
+
+  const eps=e*5.5; 
+  const req=rankEnergyMap[r]; 
+  const remaining=Math.max(req-current,0); 
+  const time=remaining/eps;
+
+  out.innerHTML=`🏆 <strong>Rank ${r} Energy Required:</strong> ${formatUnits(req)}<br>
+  ⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>
+  ⏱️ <strong>Time to reach Rank ${r}:</strong> ${time.toFixed(2)} s`;
+});
 
 // Damage Calculator
 document.getElementById("damageCalcBtn").addEventListener("click",()=>{ const dps=parseEnergy(document.getElementById("dpsInput").value); const health=parseEnergy(document.getElementById("healthInput").value); const out=document.getElementById("damageOutput"); if(dps>0 && health>0){ const t=health/dps; out.innerHTML=`🩸 <strong class="damage-output">Time to kill:</strong> <span class="damage-output">${t.toFixed(2)} s</span>`; return;} out.innerHTML="⚠️ Enter valid DPS and mob health."; });
 </script>
+
 </body>
 </html>
