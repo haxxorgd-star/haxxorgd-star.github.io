@@ -19,36 +19,37 @@ body {
 /* Top buttons */
 .top-buttons {
   display: flex;
-  gap: 20px;
-  margin-bottom: 25px;
+  gap: 25px;
+  margin-bottom: 30px;
 }
 
 .top-buttons button {
-  padding: 12px 28px;
-  font-size: 1.2rem;
+  padding: 16px 32px;
+  font-size: 1.4rem;
   border: none;
-  border-radius: 14px;
+  border-radius: 16px;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .top-buttons button:hover { transform: scale(1.05); }
-.active-btn { box-shadow: 0 0 14px #3399ff; }
+.active-btn.energy { box-shadow: 0 0 18px #3399ff; }
+.active-btn.damage { box-shadow: 0 0 18px #ff3333; }
 
 .energy-btn { background: linear-gradient(90deg, #0066ff, #00ccff); color: #fff; }
 .damage-btn { background: linear-gradient(90deg, #ff3300, #ff6666); color: #fff; }
 
 /* Sections */
-.section { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 650px; }
+.section { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 700px; }
 .section.active { display: flex; }
 
-h2 { margin: 0 0 12px 0; font-size: 2rem; }
+h2 { margin: 0 0 16px 0; font-size: 2.2rem; }
 
-.notice { font-size: 1.05rem; background: rgba(0,102,255,0.2); padding: 8px 14px; border-radius: 12px; margin-bottom: 15px; text-align: center; width: 100%; }
+.notice { font-size: 1.15rem; background: rgba(0,102,255,0.2); padding: 10px 16px; border-radius: 14px; margin-bottom: 18px; text-align: center; width: 100%; }
 
 /* Tabs */
-.tabs { display: flex; gap: 12px; margin-bottom: 18px; }
-.tab-btn { flex: 1; padding: 10px 0; border-radius: 12px; background: rgba(0,30,60,0.4); border: none; color: #cde4ff; cursor: pointer; font-weight: bold; font-size: 1.05rem; }
+.tabs { display: flex; gap: 14px; margin-bottom: 20px; }
+.tab-btn { flex: 1; padding: 14px 0; border-radius: 14px; background: rgba(0,30,60,0.4); border: none; color: #cde4ff; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
 .tab-btn.active-tab { background: rgba(0,102,255,0.6); }
 
 .tab-content { display: none; flex-direction: column; align-items: center; width: 100%; }
@@ -57,52 +58,52 @@ h2 { margin: 0 0 12px 0; font-size: 2rem; }
 .inputs-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 25px;
   width: 100%;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-label { font-size: 1.1rem; margin-bottom: 5px; display: block; text-align: center; }
+label { font-size: 1.2rem; margin-bottom: 6px; display: block; text-align: center; }
 
 input {
-  padding: 10px 14px;
-  font-size: 1.1rem;
-  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 1.2rem;
+  border-radius: 12px;
   border: none;
   background: rgba(255,255,255,0.1);
   color: #cde4ff;
   text-align: center;
-  width: 160px;
-  box-shadow: 0 0 10px #3399ff;
+  width: 180px;
+  box-shadow: 0 0 12px #3399ff;
 }
-input.damage-input { box-shadow: 0 0 10px #ff3333; }
-input:focus { box-shadow: 0 0 14px #3399ff; }
-input.damage-input:focus { box-shadow: 0 0 14px #ff3333; }
+input.damage-input { box-shadow: 0 0 12px #ff3333; }
+input:focus { box-shadow: 0 0 16px #3399ff; }
+input.damage-input:focus { box-shadow: 0 0 16px #ff3333; }
 
-button.calc-btn { padding: 10px 20px; font-size: 1.05rem; border-radius: 12px; cursor: pointer; margin-top: 6px; }
+button.calc-btn { padding: 12px 24px; font-size: 1.15rem; border-radius: 14px; cursor: pointer; margin-top: 8px; }
 
 #output, #damageOutput {
-  margin-top: 12px;
-  font-size: 1.25rem;
+  margin-top: 14px;
+  font-size: 1.35rem;
   text-align: center;
   background: rgba(0,30,60,0.4);
-  padding: 16px 24px;
-  border-radius: 14px;
-  box-shadow: 0 0 14px rgba(0,150,255,0.3);
+  padding: 18px 28px;
+  border-radius: 16px;
+  box-shadow: 0 0 16px rgba(0,150,255,0.3);
   width: 100%;
 }
 
 .damage-output { color: #ff5555; text-shadow: 0 0 4px #ff8888; }
 
-.collapsible { background-color: rgba(0,30,60,0.4); color: #cde4ff; cursor: pointer; padding: 8px 14px; width: 100%; max-width: 350px; border-radius: 12px; font-size: 1rem; text-align: center; margin-top: 12px; }
-.content { padding: 8px 14px; display: none; overflow: auto; max-height: 220px; background-color: rgba(0,30,60,0.3); border-radius: 12px; margin-top: 4px; font-size: 0.95rem; text-align: center; }
+.collapsible { background-color: rgba(0,30,60,0.4); color: #cde4ff; cursor: pointer; padding: 10px 16px; width: 100%; max-width: 380px; border-radius: 14px; font-size: 1.05rem; text-align: center; margin-top: 14px; }
+.content { padding: 10px 16px; display: none; overflow: auto; max-height: 240px; background-color: rgba(0,30,60,0.3); border-radius: 14px; margin-top: 6px; font-size: 1rem; text-align: center; }
 </style>
 </head>
 <body>
 
 <div class="top-buttons">
-  <button id="energyBtn" class="energy-btn active-btn">Energy Calculator</button>
+  <button id="energyBtn" class="energy-btn active-btn energy">Energy Calculator</button>
   <button id="damageBtn" class="damage-btn">Damage Calculator</button>
 </div>
 
@@ -158,6 +159,11 @@ button.calc-btn { padding: 10px 20px; font-size: 1.05rem; border-radius: 12px; c
   </div>
   <button id="damageCalcBtn" class="calc-btn damage-btn">Calculate</button>
   <div id="damageOutput">Enter values to calculate.</div>
+
+  <button type="button" class="collapsible">Show/Hide Supported Numbers</button>
+  <div class="content" id="damageUnitList">
+    K, M, B, T, Qd, Qn, Sx, Sp, O, N, De, Ud, Dd, TdD, QdD, QnD, SxD, SpD, OcD, NvD, Vgn, UvG, DvG, Tvg, QtV, QnV, SeV, SpG, OvG, NvG, TgN, UTG, DTG, TsTG, QtTG, QnTG, SsTG, SpTG, OcTG, NoTG, QDDR, uQDR, dQDR, tQDR, qdQDR, QnQDR, SxQDR, SpQDR, OQDDR, NQDDR, qQGNT, uQGNT, dQGNT, tQGNT
+  </div>
 </div>
 
 <script>
@@ -166,16 +172,33 @@ const energyBtn = document.getElementById("energyBtn");
 const damageBtn = document.getElementById("damageBtn");
 const energySection = document.getElementById("energySection");
 const damageSection = document.getElementById("damageSection");
-energyBtn.addEventListener("click", () => { energySection.classList.add("active"); damageSection.classList.remove("active"); energyBtn.classList.add("active-btn"); damageBtn.classList.remove("active-btn"); });
-damageBtn.addEventListener("click", () => { damageSection.classList.add("active"); energySection.classList.remove("active"); damageBtn.classList.add("active-btn"); energyBtn.classList.remove("active-btn"); });
+
+function selectSection(section){
+  if(section==='energy'){
+    energySection.classList.add("active"); damageSection.classList.remove("active");
+    energyBtn.classList.add("active-btn","energy"); damageBtn.classList.remove("active-btn","damage");
+  } else {
+    damageSection.classList.add("active"); energySection.classList.remove("active");
+    damageBtn.classList.add("active-btn","damage"); energyBtn.classList.remove("active-btn","energy");
+  }
+}
+
+energyBtn.addEventListener("click",()=>selectSection('energy'));
+damageBtn.addEventListener("click",()=>selectSection('damage'));
 
 // Tabs
 const tabs = document.querySelectorAll(".tab-btn");
 const tabContents = document.querySelectorAll(".tab-content");
-tabs.forEach(tab=>{ tab.addEventListener("click",()=>{ tabs.forEach(t=>t.classList.remove("active-tab")); tab.classList.add("active-tab"); const target=tab.dataset.tab; tabContents.forEach(c=>c.classList.remove("active")); document.getElementById(target).classList.add("active"); }); });
+tabs.forEach(tab=>{ tab.addEventListener("click",()=>{
+  tabs.forEach(t=>t.classList.remove("active-tab")); tab.classList.add("active-tab");
+  const target=tab.dataset.tab; tabContents.forEach(c=>c.classList.remove("active"));
+  document.getElementById(target).classList.add("active");
+}); });
 
-// Collapsible
-document.getElementsByClassName("collapsible")[0].addEventListener("click", () => { const c = document.getElementById("unitList"); c.style.display = c.style.display === "block" ? "none" : "block"; });
+// Collapsibles
+document.querySelectorAll(".collapsible").forEach(c=>{
+  c.addEventListener("click",()=>{ const cont=c.nextElementSibling; cont.style.display=cont.style.display==="block"?"none":"block"; });
+});
 
 // Units
 const units = ["K","M","B","T","Qd","Qn","Sx","Sp","O","N","De","Ud","Dd","TdD","QdD","QnD","SxD","SpD","OcD","NvD","Vgn","UvG","DvG","Tvg","QtV","QnV","SeV","SpG","OvG","NvG","TgN","UTG","DTG","TsTG","QtTG","QnTG","SsTG","SpTG","OcTG","NoTG","QDDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","SxQDR","SpQDR","OQDDR","NQDDR","qQGNT","uQGNT","dQGNT","tQGNT"];
@@ -186,7 +209,7 @@ function formatUnits(value){ for(let i=units.length-1;i>=0;i--){ let uv=Math.pow
 // Energy Calculations
 document.getElementById("calcPerClick").addEventListener("click",()=>{ const e=parseEnergy(document.getElementById("pcEnergy").value); const t=parseFloat(document.getElementById("pcTime").value); const out=document.getElementById("output"); if(e>0 && t>0){ const eps=e*5.5; const total=eps*t; out.innerHTML=`⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Energy after ${t} s:</strong> ${formatUnits(total)}`; return;} out.innerHTML="⚠️ Enter valid values."; });
 document.getElementById("calcTarget").addEventListener("click",()=>{ const e=parseEnergy(document.getElementById("teEnergy").value); const target=parseEnergy(document.getElementById("targetEnergyInput").value); const out=document.getElementById("output"); if(e>0 && target>0){ const eps=e*5.5; const time=target/eps; out.innerHTML=`🎯 <strong>Target Energy:</strong> ${formatUnits(target)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time required:</strong> ${time.toFixed(2)} s`; return;} out.innerHTML="⚠️ Enter valid values."; });
-const rankEnergyMap={116:parseEnergy("tstg")};
+const rankEnergyMap={116:parseEnergy("30tstg")};
 document.getElementById("calcRank").addEventListener("click",()=>{ const r=parseInt(document.getElementById("rankInput").value); const e=parseEnergy(document.getElementById("rankEnergy").value); const out=document.getElementById("output"); if(!rankEnergyMap[r]){ out.innerHTML="⚠️ Rank energy not defined."; return; } if(e<=0){ out.innerHTML="⚠️ Enter valid Energy per Click."; return; } const eps=e*5.5; const req=rankEnergyMap[r]; const time=req/eps; out.innerHTML=`🏆 <strong>Rank ${r} Energy Required:</strong> ${formatUnits(req)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time to reach Rank ${r}:</strong> ${time.toFixed(2)} s`; });
 
 // Damage Calculator
