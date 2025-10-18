@@ -413,9 +413,7 @@ function calcRequiredDps(){
 }
 
 function handleInputEvent() {
-    if (!this.classList.contains('sync-energy')) {
-        localStorage.setItem(this.id, this.value);
-    }
+    localStorage.setItem(this.id, this.value);
     
     if (this.classList.contains('sync-energy')) {
         syncEnergyInputs(this.value);
@@ -430,11 +428,11 @@ function handleInputEvent() {
 }
 
 function syncEnergyInputs(value) {
-    localStorage.setItem('savedEnergyPerClickValue', value);
     const energyInputs = document.querySelectorAll('.sync-energy');
     energyInputs.forEach(input => {
         if (input.value !== value) {
             input.value = value;
+            localStorage.setItem(input.id, value);
         }
     });
 }
@@ -506,12 +504,7 @@ function setupListeners() {
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     
     inputs.forEach(input => {
-        let savedValue = localStorage.getItem(input.id);
-        
-        if (input.classList.contains('sync-energy')) {
-            savedValue = localStorage.getItem('savedEnergyPerClickValue');
-        }
-
+        const savedValue = localStorage.getItem(input.id);
         if (savedValue !== null) {
             input.value = savedValue;
         }
@@ -589,9 +582,7 @@ function setupListeners() {
     selectSectionAndTab(savedSection, initialTab); 
     
     const firstEnergyInput = document.querySelector('.sync-energy');
-    if (firstEnergyInput && localStorage.getItem('savedEnergyPerClickValue')) {
-        syncEnergyInputs(localStorage.getItem('savedEnergyPerClickValue'));
-    } else if (firstEnergyInput) {
+    if (firstEnergyInput) {
         syncEnergyInputs(firstEnergyInput.value);
     }
 }
