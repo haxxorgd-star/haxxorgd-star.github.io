@@ -180,7 +180,7 @@ input[type=number] { -moz-appearance: textfield; }
   <div id="rankTab" class="tab-content">
     <div class="inputs-row">
       <div><label for="rankEnergy" id="label-rankEnergy">Energy per Click</label><input type="text" id="rankEnergy" placeholder="44M" autocomplete="off"></div>
-      <div><label for="rankInput" id="label-rankInput">Target Rank</label><input type="number" id="rankInput" min="1" placeholder="116"></div>
+      <div><label for="rankInput" id="label-rankInput">Target Rank</label><input type="number" id="rankInput" min="1" placeholder="120"></div>
       <div><label for="currentEnergy" id="label-currentEnergy">Current Energy</label><input type="text" id="currentEnergy" placeholder="0" autocomplete="off"></div>
     </div>
   </div>
@@ -315,7 +315,29 @@ function calcTarget(){
     out.innerHTML="⚠️ Enter valid Energy per Click and Target Energy."; 
 }
 
-const rankEnergyMap = { 116: parseEnergy("30tsTG"),117: parseEnergy("150tsTG"),118: parseEnergy("750tsTG"),119: parseEnergy("90qtTG"),120: parseEnergy("900qtTG") };
+const rankEnergyMap = { 
+    100: parseEnergy("100ovg"), 
+    101: parseEnergy("750ovg"),
+    102: parseEnergy("3nvg"),
+    103: parseEnergy("30nvg"),
+    104: parseEnergy("250nvg"),
+    105: parseEnergy("1tgn"),
+    106: parseEnergy("10tgn"),
+    107: parseEnergy("150tgn"),
+    108: parseEnergy("750tgn"),
+    109: parseEnergy("5utg"),
+    110: parseEnergy("50utg"),
+    111: parseEnergy("500utg"),
+    112: parseEnergy("10dtg"),
+    113: parseEnergy("50dtg"),
+    114: parseEnergy("250dtg"),
+    115: parseEnergy("1tstg"),
+    116: parseEnergy("30tsTG"),
+    117: parseEnergy("150tsTG"),
+    118: parseEnergy("750tsTG"),
+    119: parseEnergy("90qtTG"),
+    120: parseEnergy("900qtTG") 
+};
 function calcRank(){ 
     const r=parseInt(document.getElementById("rankInput").value); 
     const e=parseEnergy(document.getElementById("rankEnergy").value); 
@@ -323,7 +345,7 @@ function calcRank(){
     const out=document.getElementById("output"); 
     if(r <= 0 || isNaN(r)) { out.innerHTML="⚠️ Enter a valid Rank number."; return; }
     if(!rankEnergyMap[r]){ 
-        out.innerHTML=`⚠️ Rank ${r} energy cost not defined. (Only Ranks 116-120 supported)`; 
+        out.innerHTML=`⚠️ Rank ${r} energy cost not defined. (Only Ranks 100-120 supported)`; 
         return; 
     } 
     if(e<=0){ 
