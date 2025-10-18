@@ -49,6 +49,18 @@ h2 { margin: 0 0 16px 0; font-size: 2.2rem; }
   justify-content: center;
   margin-bottom: 14px;
 }
+.input-group {
+    background-color: rgba(0, 30, 60, 0.2);
+    padding: 15px 10px;
+    border-radius: 18px;
+    transition: box-shadow 0.3s ease;
+}
+.input-group:hover {
+    box-shadow: 0 0 12px rgba(0, 150, 255, 0.2);
+}
+.input-group.damage-group:hover {
+    box-shadow: 0 0 12px rgba(255, 51, 51, 0.2);
+}
 label { 
     font-size: 1.2rem; 
     margin-bottom: 6px; 
@@ -64,7 +76,6 @@ label {
     color: #ff5555;
     text-shadow: 0 0 5px rgba(255,85,85,0.7);
 }
-
 input, select {
   padding: 16px 20px;
   font-size: 1.3rem;
@@ -91,20 +102,16 @@ select {
   background-position: right 15px center;
   padding-right: 40px;
 }
-
-
 input.damage-input, select.damage-input { box-shadow: 0 0 14px #ff3333; }
 input:focus { box-shadow: 0 0 20px 5px #00aaff; }
 input.damage-input:focus, select.damage-input:focus { box-shadow: 0 0 20px 5px #ff5555; }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
-  
 select option {
     background-color: #0a1a2f; 
     color: #cde4ff;
 }
-
 #output, #damageOutput {
   margin-top: 18px;
   font-size: 1.4rem;
@@ -187,24 +194,24 @@ select option {
 
   <div id="perClickTab" class="tab-content active">
     <div class="inputs-row">
-      <div><label for="pcEnergy" id="label-pcEnergy">Energy per Click</label><input type="text" id="pcEnergy" placeholder="44M" autocomplete="off"></div>
-      <div><label for="pcTime" id="label-pcTime">Time (s)</label><input type="number" id="pcTime" value="1" min="1"></div>
+      <div class="input-group"><label for="pcEnergy" id="label-pcEnergy">Energy per Click</label><input type="text" id="pcEnergy" class="sync-energy" placeholder="44M" autocomplete="off"></div>
+      <div class="input-group"><label for="pcTime" id="label-pcTime">Time (s)</label><input type="number" id="pcTime" value="1" min="1"></div>
     </div>
   </div>
 
   <div id="targetTab" class="tab-content">
     <div class="inputs-row">
-      <div><label for="teEnergy" id="label-teEnergy">Energy per Click</label><input type="text" id="teEnergy" placeholder="44M" autocomplete="off"></div>
-      <div><label for="targetEnergyInput" id="label-targetEnergyInput">Target Energy</label><input type="text" id="targetEnergyInput" placeholder="1T" autocomplete="off"></div>
-      <div><label for="currentEnergyTarget" id="label-currentEnergyTarget">Current Energy</label><input type="text" id="currentEnergyTarget" placeholder="0" autocomplete="off"></div>
+      <div class="input-group"><label for="teEnergy" id="label-teEnergy">Energy per Click</label><input type="text" id="teEnergy" class="sync-energy" placeholder="44M" autocomplete="off"></div>
+      <div class="input-group"><label for="targetEnergyInput" id="label-targetEnergyInput">Target Energy</label><input type="text" id="targetEnergyInput" placeholder="1T" autocomplete="off"></div>
+      <div class="input-group"><label for="currentEnergyTarget" id="label-currentEnergyTarget">Current Energy</label><input type="text" id="currentEnergyTarget" placeholder="0" autocomplete="off"></div>
     </div>
   </div>
 
   <div id="rankTab" class="tab-content">
     <div class="inputs-row">
-      <div><label for="rankEnergy" id="label-rankEnergy">Energy per Click</label><input type="text" id="rankEnergy" placeholder="44M" autocomplete="off"></div>
-      <div><label for="rankInput" id="label-rankInput">Target Rank</label><input type="number" id="rankInput" min="1" placeholder="120"></div>
-      <div><label for="currentEnergy" id="label-currentEnergy">Current Energy</label><input type="text" id="currentEnergy" placeholder="0" autocomplete="off"></div>
+      <div class="input-group"><label for="rankEnergy" id="label-rankEnergy">Energy per Click</label><input type="text" id="rankEnergy" class="sync-energy" placeholder="44M" autocomplete="off"></div>
+      <div class="input-group"><label for="rankInput" id="label-rankInput">Target Rank</label><input type="number" id="rankInput" min="1" placeholder="120"></div>
+      <div class="input-group"><label for="currentEnergy" id="label-currentEnergy">Current Energy</label><input type="text" id="currentEnergy" placeholder="0" autocomplete="off"></div>
     </div>
   </div>
 
@@ -226,7 +233,7 @@ select option {
 
   <div id="timeKillTab" class="tab-content active">
     <div class="inputs-row">
-      <div><label for="mobSelectTime">Select Mob</label>
+      <div class="input-group damage-group"><label for="mobSelectTime">Select Mob</label>
         <select id="mobSelectTime" class="damage-input">
           <option value="">Custom</option>
           <option value="30.5qdQDR">Blood Queen</option>
@@ -235,14 +242,14 @@ select option {
           <option value="871NQDDR">Galaxy Hunter</option>
         </select>
       </div>
-      <div><label for="dpsTime" id="label-dpsTime">DPS</label><input type="text" id="dpsTime" class="damage-input" placeholder="5M" autocomplete="off"></div>
-      <div><label for="healthTime" id="label-healthTime">Mob Health</label><input type="text" id="healthTime" class="damage-input" placeholder="100M" autocomplete="off"></div>
+      <div class="input-group damage-group"><label for="dpsTime" id="label-dpsTime">DPS</label><input type="text" id="dpsTime" class="damage-input" placeholder="5M" autocomplete="off"></div>
+      <div class="input-group damage-group"><label for="healthTime" id="label-healthTime">Mob Health</label><input type="text" id="healthTime" class="damage-input" placeholder="100M" autocomplete="off"></div>
     </div>
   </div>
 
   <div id="requiredDpsTab" class="tab-content">
     <div class="inputs-row">
-      <div><label for="mobSelectDps">Select Mob</label>
+      <div class="input-group damage-group"><label for="mobSelectDps">Select Mob</label>
         <select id="mobSelectDps" class="damage-input">
           <option value="">Custom</option>
           <option value="30.5qdQDR">Blood Queen</option>
@@ -251,8 +258,8 @@ select option {
           <option value="871NQDDR">Galaxy Hunter</option>
         </select>
       </div>
-      <div><label for="desiredTimeDps" id="label-desiredTimeDps">Desired Time (s)</label><input type="number" id="desiredTimeDps" class="damage-input" placeholder="60"></div>
-      <div><label for="healthDps" id="label-healthDps">Mob Health</label><input type="text" id="healthDps" class="damage-input" placeholder="100M" autocomplete="off"></div>
+      <div class="input-group damage-group"><label for="desiredTimeDps" id="label-desiredTimeDps">Desired Time (s)</label><input type="number" id="desiredTimeDps" class="damage-input" placeholder="60"></div>
+      <div class="input-group damage-group"><label for="healthDps" id="label-healthDps">Mob Health</label><input type="text" id="healthDps" class="damage-input" placeholder="100M" autocomplete="off"></div>
     </div>
   </div>
 
@@ -406,6 +413,11 @@ function calcRequiredDps(){
 
 function handleInputEvent() {
     localStorage.setItem(this.id, this.value);
+    
+    if (this.classList.contains('sync-energy')) {
+        syncEnergyInputs(this.value);
+    }
+    
     const parentTab = this.closest('.tab-content').id;
     if (parentTab === 'perClickTab') calcPerClick();
     else if (parentTab === 'targetTab') calcTarget();
@@ -414,16 +426,27 @@ function handleInputEvent() {
     else if (parentTab === 'requiredDpsTab') calcRequiredDps();
 }
 
+function syncEnergyInputs(value) {
+    const energyInputs = document.querySelectorAll('.sync-energy');
+    energyInputs.forEach(input => {
+        if (input.value !== value) {
+            input.value = value;
+            localStorage.setItem(input.id, value);
+        }
+    });
+}
+
 function handleMobSelection(e) {
     const isTimeKill = e.target.id === 'mobSelectTime';
-    const healthInputId = isTimeKill ? "healthTime" : "healthDps";
+    const healthInput = document.getElementById(isTimeKill ? "healthTime" : "healthDps");
     const calcFunction = isTimeKill ? calcTimeKill : calcRequiredDps;
+    
     if(e.target.value) {
-        document.getElementById(healthInputId).value = e.target.value;
-        localStorage.setItem(healthInputId, e.target.value);
+        healthInput.value = e.target.value;
+        localStorage.setItem(healthInput.id, e.target.value);
     } else {
-      document.getElementById(healthInputId).value = "";
-        localStorage.setItem(healthInputId, "");
+        healthInput.value = "";
+        localStorage.setItem(healthInput.id, "");
     }
     calcFunction();
 }
@@ -552,6 +575,11 @@ function setupListeners() {
     }
     
     selectSectionAndTab(savedSection, initialTab);
+    
+    const firstEnergyInput = document.querySelector('.sync-energy');
+    if (firstEnergyInput) {
+        syncEnergyInputs(firstEnergyInput.value);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', setupListeners);
