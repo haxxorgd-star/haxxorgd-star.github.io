@@ -251,7 +251,13 @@ document.getElementById("calcPerClick").addEventListener("click",()=>{ const e=p
 document.getElementById("calcTarget").addEventListener("click",()=>{ const e=parseEnergy(document.getElementById("teEnergy").value); const target=parseEnergy(document.getElementById("targetEnergyInput").value); const out=document.getElementById("output"); if(e>0 && target>0){ const eps=e*5.5; const time=target/eps; out.innerHTML=`🎯 <strong>Target Energy:</strong> ${formatUnits(target)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time required:</strong> ${time.toFixed(2)} s`; return;} out.innerHTML="⚠️ Enter valid values."; });
 
 // Rank Up with Current Energy
-const rankEnergyMap={116:parseEnergy("30tstg")};
+const rankEnergyMap = {
+  116: parseEnergy("30tstg"),
+  117: parseEnergy("150tsTG"),
+  118: parseEnergy("750tsTG"),
+  119: parseEnergy("90qtTG"),
+  120: parseEnergy("900qtTG")
+};
 document.getElementById("calcRank").addEventListener("click",()=>{ 
   const r=parseInt(document.getElementById("rankInput").value); 
   const e=parseEnergy(document.getElementById("rankEnergy").value); 
@@ -277,3 +283,4 @@ document.getElementById("damageCalcBtn").addEventListener("click",()=>{ const dp
 
 </body>
 </html>
+
