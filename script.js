@@ -35,7 +35,7 @@ function formatTime(seconds) {
 }
 
 function calcPerClick(){ 
-    const e=parseEnergy(document.getElementById("pcEnergy").value); 
+    const e=parseEnergy(document.getElementById("energyPerClick").value); 
     const t=parseFloat(document.getElementById("pcTime").value); 
     const out=document.getElementById("output"); 
     if(e>0 && t>0){ 
@@ -48,7 +48,7 @@ function calcPerClick(){
 }
 
 function calcTarget(){ 
-    const e=parseEnergy(document.getElementById("teEnergy").value); 
+    const e=parseEnergy(document.getElementById("energyPerClick").value); 
     const target=parseEnergy(document.getElementById("targetEnergyInput").value); 
     const current=parseEnergy(document.getElementById("currentEnergyTarget").value); 
     const out=document.getElementById("output"); 
@@ -92,7 +92,7 @@ const rankEnergyMap = {
 };
 function calcRank(){ 
     const r=parseInt(document.getElementById("rankInput").value); 
-    const e=parseEnergy(document.getElementById("rankEnergy").value); 
+    const e=parseEnergy(document.getElementById("energyPerClick").value); 
     const current=parseEnergy(document.getElementById("currentEnergy").value); 
     const out=document.getElementById("output"); 
     if(r <= 0 || isNaN(r)) { out.innerHTML="⚠️ Enter a valid Rank number."; return; }
@@ -136,9 +136,9 @@ function calcRequiredDps(){
 function handleInputEvent() {
     localStorage.setItem(this.id, this.value);
     
-    if (this.classList.contains('sync-energy')) {
-        syncEnergyInputs(this.value, this.id);
-    }
+    // NOTE: syncEnergyInputs is no longer needed/called here because
+    // the three energy inputs now share the same ID ("energyPerClick"),
+    // so the browser automatically syncs their values on input.
     
     const parentTab = this.closest('.tab-content').id;
     if (parentTab === 'perClickTab') calcPerClick();
@@ -146,16 +146,6 @@ function handleInputEvent() {
     else if (parentTab === 'rankTab') calcRank();
     else if (parentTab === 'timeKillTab') calcTimeKill();
     else if (parentTab === 'requiredDpsTab') calcRequiredDps();
-}
-
-function syncEnergyInputs(value, sourceId) {
-    const energyInputs = document.querySelectorAll('.sync-energy');
-    energyInputs.forEach(input => {
-        if (input.id !== sourceId && input.value !== value) {
-            input.value = value;
-            localStorage.setItem(input.id, value); 
-        }
-    });
 }
 
 function handleMobSelection(e, skipCalculation = false) { 
@@ -222,7 +212,8 @@ function selectSectionAndTab(section, tabId) {
 
 
 function setupListeners() {
-    const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+    // Only target inputs with unique IDs for individual saving
+    const inputs = document.querySelectorAll('input[type="text"]:not(#energyPerClick), input[type="number"]');
     
     inputs.forEach(input => {
         const savedValue = localStorage.getItem(input.id);
@@ -242,6 +233,24 @@ function setupListeners() {
             input.addEventListener('blur', () => label.classList.remove(activeClass));
         }
     });
+
+    // Special handling for the fused energyPerClick input
+    const energyInput = document.getElementById('energyPerClick');
+    if (energyInput) {
+        const savedEnergyValue = localStorage.getItem(energyInput.id);
+        if (savedEnergyValue !== null) {
+            // Set the value. The browser will sync it to all inputs sharing this ID.
+            energyInput.value = savedEnergyValue; 
+        }
+        // Save the value on input
+        energyInput.addEventListener("input", handleInputEvent); 
+
+        // Add label listeners for all elements associated with the energyPerClick ID
+        document.querySelectorAll('label[for="energyPerClick"]').forEach(label => {
+            energyInput.addEventListener('focus', () => label.classList.add('active-label-color'));
+            energyInput.addEventListener('blur', () => label.classList.remove('active-label-color'));
+        });
+    }
 
     const mobSelectTime = document.getElementById("mobSelectTime");
     const mobSelectDps = document.getElementById("mobSelectDps");
@@ -297,11 +306,6 @@ function setupListeners() {
         : (localStorage.getItem('damageTab') || 'timeKillTab');
     
     selectSectionAndTab(savedSection, initialTab); 
-    
-    const firstEnergyInput = document.querySelector('.sync-energy');
-    if (firstEnergyInput) {
-        syncEnergyInputs(firstEnergyInput.value, firstEnergyInput.id);
-    }
 }
 
 document.addEventListener('DOMContentLoaded', setupListeners);
