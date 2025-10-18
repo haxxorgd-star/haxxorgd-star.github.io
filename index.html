@@ -391,6 +391,54 @@ function handleMobSelection(e) {
 }
 
 
+// Function to select the section and tab (handles persistence)
+function selectSectionAndTab(section, tabId) {
+    // 1. Set the main section
+    const energySection = document.getElementById("energySection");
+    const damageSection = document.getElementById("damageSection");
+    const energyBtn = document.getElementById("energyBtn");
+    const damageBtn = document.getElementById("damageBtn");
+    
+    if (section === 'energy') {
+        energySection.classList.add("active"); damageSection.classList.remove("active");
+        energyBtn.classList.add("active-btn", "energy"); damageBtn.classList.remove("active-btn", "damage");
+        localStorage.setItem('activeSection', 'energy');
+    } else {
+        damageSection.classList.add("active"); energySection.classList.remove("active");
+        damageBtn.classList.add("active-btn", "damage"); energyBtn.classList.remove("active-btn", "energy");
+        localStorage.setItem('activeSection', 'damage');
+    }
+    
+    const tabsContainerId = (section === 'energy') ? 'energySection' : 'damageSection';
+    const tabBtns = document.querySelectorAll(`#${tabsContainerId} .tab-btn`);
+    const tabContents = document.querySelectorAll(`#${tabsContainerId} .tab-content`);
+    const isDamage = section === 'damage';
+
+    // 2. Set the active tab
+    tabBtns.forEach(t => t.classList.remove("active-tab", "energy", "damage"));
+    tabContents.forEach(c => c.classList.remove("active"));
+    
+    const targetTabBtn = document.querySelector(`[data-tab="${tabId}"]`);
+    const targetTabContent = document.getElementById(tabId);
+    
+    if (targetTabBtn && targetTabContent) {
+        targetTabBtn.classList.add("active-tab");
+        targetTabBtn.classList.add(isDamage ? "damage" : "energy");
+        targetTabContent.classList.add("active");
+        
+        // Save the *last selected tab for this specific section*
+        localStorage.setItem(`${section}Tab`, tabId); 
+
+        // 3. Run the correct calculation for the shown tab
+        if(tabId === 'perClickTab') calcPerClick();
+        else if(tabId === 'targetTab') calcTarget();
+        else if(tabId === 'rankTab') calcRank();
+        else if(tabId === 'timeKillTab') calcTimeKill();
+        else if(tabId === 'requiredDpsTab') calcRequiredDps();
+    }
+}
+
+
 function setupListeners() {
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     
@@ -422,59 +470,19 @@ function setupListeners() {
     // UI Logic 
     const energyBtn = document.getElementById("energyBtn");
     const damageBtn = document.getElementById("damageBtn");
-    const energySection = document.getElementById("energySection");
-    const damageSection = document.getElementById("damageSection");
-
-    // FUNCTION TO SELECT THE SECTION AND TAB (handles persistence)
-    function selectSectionAndTab(section, tabId) {
-        // 1. Set the main section
-        if (section === 'energy') {
-            energySection.classList.add("active"); damageSection.classList.remove("active");
-            energyBtn.classList.add("active-btn", "energy"); damageBtn.classList.remove("active-btn", "damage");
-            localStorage.setItem('activeSection', 'energy');
-        } else {
-            damageSection.classList.add("active"); energySection.classList.remove("active");
-            damageBtn.classList.add("active-btn", "damage"); energyBtn.classList.remove("active-btn", "energy");
-            localStorage.setItem('activeSection', 'damage');
-        }
-        
-        const tabsContainerId = (section === 'energy') ? 'energySection' : 'damageSection';
-        const tabBtns = document.querySelectorAll(`#${tabsContainerId} .tab-btn`);
-        const tabContents = document.querySelectorAll(`#${tabsContainerId} .tab-content`);
-        const isDamage = section === 'damage';
-
-        // 2. Set the active tab
-        tabBtns.forEach(t => t.classList.remove("active-tab", "energy", "damage"));
-        tabContents.forEach(c => c.classList.remove("active"));
-        
-        const targetTabBtn = document.querySelector(`[data-tab="${tabId}"]`);
-        const targetTabContent = document.getElementById(tabId);
-        
-        if (targetTabBtn && targetTabContent) {
-            targetTabBtn.classList.add("active-tab");
-            targetTabBtn.classList.add(isDamage ? "damage" : "energy");
-            targetTabContent.classList.add("active");
-            localStorage.setItem('activeTab', tabId);
-
-            // 3. Run the correct calculation for the shown tab
-            if(tabId === 'perClickTab') calcPerClick();
-            else if(tabId === 'targetTab') calcTarget();
-            else if(tabId === 'rankTab') calcRank();
-            else if(tabId === 'timeKillTab') calcTimeKill();
-            else if(tabId === 'requiredDpsTab') calcRequiredDps();
-        }
-    }
     
-    // FIX: Change main button listeners to force the first tab (Per Click / Time to Kill)
+    // --- UPDATED MAIN BUTTON LISTENERS TO RESTORE LAST TAB FOR THAT SECTION ---
     energyBtn.addEventListener("click",()=>{
-        selectSectionAndTab('energy', 'perClickTab');
+        const savedTab = localStorage.getItem('energyTab') || 'perClickTab';
+        selectSectionAndTab('energy', savedTab);
     });
 
     damageBtn.addEventListener("click",()=>{
-        selectSectionAndTab('damage', 'timeKillTab');
+        const savedTab = localStorage.getItem('damageTab') || 'timeKillTab';
+        selectSectionAndTab('damage', savedTab);
     });
 
-    // Tabs generic binding (These still save the last tab)
+    // Tabs generic binding (These call selectSectionAndTab which now saves to 'energyTab' or 'damageTab')
     function setupTabs(tabParentId, isDamage=false){
       const tabBtns = document.querySelectorAll(`#${tabParentId} .tab-btn`);
       const section = isDamage ? 'damage' : 'energy';
@@ -497,20 +505,18 @@ function setupListeners() {
       });
     });
 
-    // --- INITIALIZATION ON LOAD (Still uses persistence) ---
+    // --- INITIALIZATION ON LOAD ---
     const savedSection = localStorage.getItem('activeSection') || 'energy';
-    let savedTab = localStorage.getItem('activeTab');
     
-    // Default the tab based on the section if no tab is saved, or if saved tab is for the wrong section
+    // Determine the initial tab to load based on the saved section-specific tab, or default
+    let initialTab = 'perClickTab';
     if (savedSection === 'energy') {
-        savedTab = savedTab || 'perClickTab';
-        if (savedTab && (savedTab.includes('Kill') || savedTab.includes('Dps'))) savedTab = 'perClickTab';
-    } else { // damage section
-        savedTab = savedTab || 'timeKillTab';
-        if (savedTab && (savedTab.includes('Click') || savedTab.includes('target') || savedTab.includes('rank'))) savedTab = 'timeKillTab';
+        initialTab = localStorage.getItem('energyTab') || 'perClickTab';
+    } else {
+        initialTab = localStorage.getItem('damageTab') || 'timeKillTab';
     }
     
-    selectSectionAndTab(savedSection, savedTab);
+    selectSectionAndTab(savedSection, initialTab);
 }
 
 document.addEventListener('DOMContentLoaded', setupListeners);
