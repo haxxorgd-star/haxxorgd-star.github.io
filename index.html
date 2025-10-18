@@ -64,6 +64,7 @@ label {
     color: #ff5555;
     text-shadow: 0 0 5px rgba(255,85,85,0.7);
 }
+
 input, select {
   padding: 16px 20px;
   font-size: 1.3rem;
@@ -75,6 +76,13 @@ input, select {
   width: 200px;
   box-shadow: 0 0 14px #3399ff;
   transition: box-shadow 0.2s ease;
+  -webkit-appearance: initial;
+  -moz-appearance: initial;
+  appearance: initial;
+  background-image: none;
+  padding-right: 20px;
+}
+select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -84,13 +92,14 @@ input, select {
   padding-right: 40px;
 }
 
+
 input.damage-input, select.damage-input { box-shadow: 0 0 14px #ff3333; }
 input:focus { box-shadow: 0 0 20px 5px #00aaff; }
 input.damage-input:focus, select.damage-input:focus { box-shadow: 0 0 20px 5px #ff5555; }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
-
+  
 select option {
     background-color: #0a1a2f; 
     color: #cde4ff;
@@ -218,13 +227,13 @@ select option {
   <div id="timeKillTab" class="tab-content active">
     <div class="inputs-row">
       <div><label for="mobSelectTime">Select Mob</label>
-       <select id="mobSelectTime" class="damage-input">
-  <option value="">Custom</option> 
-  <option value="30.5qdQDR">Blood Queen</option>
-  <option value="305QnQDR">Shadow</option>
-  <option value="733SpQDR">Lord Boro</option>
-  <option value="871NQDDR">Galaxy Hunter</option>
-</select>
+        <select id="mobSelectTime" class="damage-input">
+          <option value="">Custom</option>
+          <option value="30.5qdQDR">Blood Queen</option>
+          <option value="305QnQDR">Shadow</option>
+          <option value="733SpQDR">Lord Boro</option>
+          <option value="871NQDDR">Galaxy Hunter</option>
+        </select>
       </div>
       <div><label for="dpsTime" id="label-dpsTime">DPS</label><input type="text" id="dpsTime" class="damage-input" placeholder="5M" autocomplete="off"></div>
       <div><label for="healthTime" id="label-healthTime">Mob Health</label><input type="text" id="healthTime" class="damage-input" placeholder="100M" autocomplete="off"></div>
@@ -235,12 +244,12 @@ select option {
     <div class="inputs-row">
       <div><label for="mobSelectDps">Select Mob</label>
         <select id="mobSelectDps" class="damage-input">
-  <option value="">Custom</option>
-  <option value="30.5qdQDR">Blood Queen</option>
-  <option value="305QnQDR">Shadow</option>
-  <option value="733SpQDR">Lord Boro</option>
-  <option value="871NQDDR">Galaxy Hunter</option>
-</select>
+          <option value="">Custom</option>
+          <option value="30.5qdQDR">Blood Queen</option>
+          <option value="305QnQDR">Shadow</option>
+          <option value="733SpQDR">Lord Boro</option>
+          <option value="871NQDDR">Galaxy Hunter</option>
+        </select>
       </div>
       <div><label for="desiredTimeDps" id="label-desiredTimeDps">Desired Time (s)</label><input type="number" id="desiredTimeDps" class="damage-input" placeholder="60"></div>
       <div><label for="healthDps" id="label-healthDps">Mob Health</label><input type="text" id="healthDps" class="damage-input" placeholder="100M" autocomplete="off"></div>
@@ -413,7 +422,7 @@ function handleMobSelection(e) {
         document.getElementById(healthInputId).value = e.target.value;
         localStorage.setItem(healthInputId, e.target.value);
     } else {
-        document.getElementById(healthInputId).value = "";
+      document.getElementById(healthInputId).value = "";
         localStorage.setItem(healthInputId, "");
     }
     calcFunction();
@@ -493,7 +502,6 @@ function setupListeners() {
         }
         select.addEventListener("change", handleMobSelection);
 
-    
         if (select.value) {
             if (select.id === 'mobSelectTime') calcTimeKill();
             else if (select.id === 'mobSelectDps') calcRequiredDps();
