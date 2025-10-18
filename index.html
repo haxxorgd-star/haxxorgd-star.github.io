@@ -440,6 +440,8 @@ function handleMobSelection(e) {
     const isTimeKill = e.target.id === 'mobSelectTime';
     const healthInput = document.getElementById(isTimeKill ? "healthTime" : "healthDps");
     const calcFunction = isTimeKill ? calcTimeKill : calcRequiredDps;
+
+    localStorage.setItem(e.target.id, e.target.value);
     
     if(e.target.value) {
         healthInput.value = e.target.value;
@@ -515,20 +517,15 @@ function setupListeners() {
         }
     });
 
-    document.getElementById("mobSelectTime").addEventListener("change", handleMobSelection);
-    document.getElementById("mobSelectDps").addEventListener("change", handleMobSelection);
+    const mobSelectTime = document.getElementById("mobSelectTime");
+    const mobSelectDps = document.getElementById("mobSelectDps");
     
-    document.querySelectorAll('select').forEach(select => {
+    [mobSelectTime, mobSelectDps].forEach(select => {
         const savedValue = localStorage.getItem(select.id);
         if (savedValue !== null) {
             select.value = savedValue;
         }
         select.addEventListener("change", handleMobSelection);
-
-        if (select.value) {
-            if (select.id === 'mobSelectTime') calcTimeKill();
-            else if (select.id === 'mobSelectDps') calcRequiredDps();
-        }
     });
 
     const energyBtn = document.getElementById("energyBtn");
@@ -580,6 +577,9 @@ function setupListeners() {
     if (firstEnergyInput) {
         syncEnergyInputs(firstEnergyInput.value);
     }
+
+    if (mobSelectTime.value) handleMobSelection({ target: mobSelectTime });
+    if (mobSelectDps.value) handleMobSelection({ target: mobSelectDps });
 }
 
 document.addEventListener('DOMContentLoaded', setupListeners);
