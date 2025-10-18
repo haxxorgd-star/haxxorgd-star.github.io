@@ -1,1 +1,1 @@
-Anime Eternal Energy Calculator
+Anime Eternal Energy and Damage Calculator
