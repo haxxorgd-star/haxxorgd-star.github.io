@@ -66,7 +66,7 @@ h2 { margin: 0 0 16px 0; font-size: 2.2rem; }
 
 label { font-size: 1.2rem; margin-bottom: 6px; display: block; text-align: center; }
 
-input {
+input, select {
   padding: 14px 18px;
   font-size: 1.2rem;
   border-radius: 12px;
@@ -77,16 +77,13 @@ input {
   width: 180px;
   box-shadow: 0 0 12px #3399ff;
 }
-input.damage-input { box-shadow: 0 0 12px #ff3333; }
+input.damage-input, select.damage-input { box-shadow: 0 0 12px #ff3333; }
 input:focus { box-shadow: 0 0 16px #3399ff; }
-input.damage-input:focus { box-shadow: 0 0 16px #ff3333; }
+input.damage-input:focus, select.damage-input:focus { box-shadow: 0 0 16px #ff3333; }
 
 /* Remove number input arrows */
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
 
 button.calc-btn { padding: 12px 24px; font-size: 1.15rem; border-radius: 14px; cursor: pointer; margin-top: 8px; }
@@ -193,10 +190,20 @@ button.calc-btn { padding: 12px 24px; font-size: 1.15rem; border-radius: 14px; c
 <!-- Damage Calculator -->
 <div id="damageSection" class="section">
   <h2>🩸 Damage Calculator 🩸</h2>
-  <div class="inputs-row">
-    <div><label>DPS</label><input type="text" id="dpsInput" class="damage-input" placeholder="5M"></div>
-    <div><label>Mob Health</label><input type="text" id="healthInput" class="damage-input" placeholder="100M"></div>
+<div class="inputs-row">
+  <div>
+    <label>Select Mob</label>
+    <select id="mobSelect" class="damage-input">
+      <option value="">--Custom--</option>
+      <option value="30.5qdQDR">Blood Queen</option>
+      <option value="305QnQDR">Shadow</option>
+      <option value="733SpQDR">Lord Boro</option>
+      <option value="871NQDDR">Galaxy Hunter</option>
+    </select>
   </div>
+  <div><label>DPS</label><input type="text" id="dpsInput" class="damage-input" placeholder="5M"></div>
+  <div><label>Mob Health</label><input type="text" id="healthInput" class="damage-input" placeholder="100M"></div>
+</div>
   <button id="damageCalcBtn" class="calc-btn damage-btn">Calculate</button>
   <div id="damageOutput">Enter values to calculate.</div>
 
@@ -258,6 +265,7 @@ const rankEnergyMap = {
   119: parseEnergy("90qtTG"),
   120: parseEnergy("900qtTG")
 };
+
 document.getElementById("calcRank").addEventListener("click",()=>{ 
   const r=parseInt(document.getElementById("rankInput").value); 
   const e=parseEnergy(document.getElementById("rankEnergy").value); 
@@ -278,9 +286,30 @@ document.getElementById("calcRank").addEventListener("click",()=>{
 });
 
 // Damage Calculator
-document.getElementById("damageCalcBtn").addEventListener("click",()=>{ const dps=parseEnergy(document.getElementById("dpsInput").value); const health=parseEnergy(document.getElementById("healthInput").value); const out=document.getElementById("damageOutput"); if(dps>0 && health>0){ const t=health/dps; out.innerHTML=`🩸 <strong class="damage-output">Time to kill:</strong> <span class="damage-output">${t.toFixed(2)} s</span>`; return;} out.innerHTML="⚠️ Enter valid DPS and mob health."; });
+const mobSelect = document.getElementById("mobSelect");
+const healthInput = document.getElementById("healthInput");
+
+mobSelect.addEventListener("change", () => {
+  const value = mobSelect.value;
+  if(value){
+    healthInput.value = value;
+  } else {
+    healthInput.value = "";
+  }
+});
+
+document.getElementById("damageCalcBtn").addEventListener("click",()=>{ 
+  const dps=parseEnergy(document.getElementById("dpsInput").value); 
+  const health=parseEnergy(document.getElementById("healthInput").value); 
+  const out=document.getElementById("damageOutput"); 
+  if(dps>0 && health>0){ 
+    const t=health/dps; 
+    out.innerHTML=`🩸 <strong class="damage-output">Time to kill:</strong> <span class="damage-output">${t.toFixed(2)} s</span>`; 
+    return;
+  } 
+  out.innerHTML="⚠️ Enter valid DPS and mob health."; 
+});
 </script>
 
 </body>
 </html>
-
