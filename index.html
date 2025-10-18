@@ -436,7 +436,7 @@ function syncEnergyInputs(value) {
     });
 }
 
-function handleMobSelection(e) {
+function handleMobSelection(e, skipCalculation = false) { 
     const isTimeKill = e.target.id === 'mobSelectTime';
     const healthInput = document.getElementById(isTimeKill ? "healthTime" : "healthDps");
     const calcFunction = isTimeKill ? calcTimeKill : calcRequiredDps;
@@ -450,7 +450,10 @@ function handleMobSelection(e) {
         healthInput.value = "";
         localStorage.setItem(healthInput.id, "");
     }
-    calcFunction();
+
+    if (!skipCalculation) {
+        calcFunction();
+    }
 }
 
 function selectSectionAndTab(section, tabId) {
@@ -526,6 +529,10 @@ function setupListeners() {
             select.value = savedValue;
         }
         select.addEventListener("change", handleMobSelection);
+
+        if (select.value) {
+            handleMobSelection({ target: select }, true);
+        }
     });
 
     const energyBtn = document.getElementById("energyBtn");
@@ -571,15 +578,12 @@ function setupListeners() {
         initialTab = localStorage.getItem('damageTab') || 'timeKillTab';
     }
     
-    selectSectionAndTab(savedSection, initialTab);
+    selectSectionAndTab(savedSection, initialTab); 
     
     const firstEnergyInput = document.querySelector('.sync-energy');
     if (firstEnergyInput) {
         syncEnergyInputs(firstEnergyInput.value);
     }
-
-    if (mobSelectTime.value) handleMobSelection({ target: mobSelectTime });
-    if (mobSelectDps.value) handleMobSelection({ target: mobSelectDps });
 }
 
 document.addEventListener('DOMContentLoaded', setupListeners);
