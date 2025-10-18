@@ -16,6 +16,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: background 0.5s ease;
+}
+body.damage-mode {
+  background: radial-gradient(circle at center, #1f0a0a 0%, #140000 100%);
 }
 .top-buttons { display: flex; gap: 20px; margin-bottom: 30px; }
 .top-buttons button {
@@ -466,10 +470,12 @@ function selectSectionAndTab(section, tabId) {
         energySection.classList.add("active"); damageSection.classList.remove("active");
         energyBtn.classList.add("active-btn", "energy"); damageBtn.classList.remove("active-btn", "damage");
         localStorage.setItem('activeSection', 'energy');
+        document.body.classList.remove('damage-mode');
     } else {
         damageSection.classList.add("active"); energySection.classList.remove("active");
         damageBtn.classList.add("active-btn", "damage"); energyBtn.classList.remove("active-btn", "energy");
         localStorage.setItem('activeSection', 'damage');
+        document.body.classList.add('damage-mode');
     }
     
     const tabsContainerId = (section === 'energy') ? 'energySection' : 'damageSection';
@@ -574,8 +580,10 @@ function setupListeners() {
     let initialTab = 'perClickTab';
     if (savedSection === 'energy') {
         initialTab = localStorage.getItem('energyTab') || 'perClickTab';
+        document.body.classList.remove('damage-mode');
     } else {
         initialTab = localStorage.getItem('damageTab') || 'timeKillTab';
+        document.body.classList.add('damage-mode');
     }
     
     selectSectionAndTab(savedSection, initialTab); 
