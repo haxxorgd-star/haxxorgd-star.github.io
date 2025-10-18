@@ -15,8 +15,6 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
-/* Top buttons */
 .top-buttons { display: flex; gap: 25px; margin-bottom: 35px; }
 .top-buttons button {
   padding: 18px 36px;
@@ -29,27 +27,18 @@ body {
 .top-buttons button:hover { transform: scale(1.05); }
 .active-btn.energy { box-shadow: 0 0 18px #3399ff; }
 .active-btn.damage { box-shadow: 0 0 18px #ff3333; }
-
 .energy-btn { background: linear-gradient(90deg, #0066ff, #00ccff); color: #fff; }
 .damage-btn { background: linear-gradient(90deg, #ff3300, #ff6666); color: #fff; }
-
-/* Sections */
 .section { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 700px; }
 .section.active { display: flex; }
-
 h2 { margin: 0 0 16px 0; font-size: 2.2rem; }
-
 .notice { font-size: 1.15rem; background: rgba(0,102,255,0.2); padding: 10px 16px; border-radius: 14px; margin-bottom: 18px; text-align: center; width: 100%; }
-
-/* Tabs */
 .tabs { display: flex; gap: 14px; margin-bottom: 20px; }
 .tab-btn { flex: 1; padding: 14px 0; border-radius: 14px; background: rgba(0,30,60,0.4); border: none; color: #cde4ff; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
 .tab-btn.active-tab.energy { background: rgba(0,102,255,0.6); color: #fff; }
 .tab-btn.active-tab.damage { background: rgba(255,50,50,0.7); color: #fff; }
-
 .tab-content { display: none; flex-direction: column; align-items: center; width: 100%; }
 .tab-content.active { display: flex; }
-
 .inputs-row {
   display: flex;
   flex-wrap: wrap;
@@ -58,7 +47,6 @@ h2 { margin: 0 0 16px 0; font-size: 2.2rem; }
   justify-content: center;
   margin-bottom: 14px;
 }
-
 label { 
     font-size: 1.2rem; 
     margin-bottom: 6px; 
@@ -66,8 +54,6 @@ label {
     text-align: center; 
     transition: color 0.2s ease;
 }
-
-/* New CSS for active label */
 .active-label-color {
     color: #00ccff;
     text-shadow: 0 0 5px rgba(0,204,255,0.7);
@@ -76,7 +62,6 @@ label {
     color: #ff5555;
     text-shadow: 0 0 5px rgba(255,85,85,0.7);
 }
-
 input, select {
   padding: 16px 20px;
   font-size: 1.3rem;
@@ -89,16 +74,12 @@ input, select {
   box-shadow: 0 0 14px #3399ff;
   transition: box-shadow 0.2s ease;
 }
-
 input.damage-input, select.damage-input { box-shadow: 0 0 14px #ff3333; }
 input:focus { box-shadow: 0 0 20px 5px #00aaff; }
 input.damage-input:focus, select.damage-input:focus { box-shadow: 0 0 20px 5px #ff5555; }
-
-/* Remove number input arrows */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
-
 #output, #damageOutput {
   margin-top: 18px;
   font-size: 1.4rem;
@@ -109,9 +90,7 @@ input[type=number] { -moz-appearance: textfield; }
   box-shadow: 0 0 18px rgba(0,150,255,0.3);
   width: 100%;
 }
-
 .damage-output { color: #ff5555; text-shadow: 0 0 4px #ff8888; }
-
 .collapsible { 
   background-color: rgba(0,30,60,0.4); 
   color: #cde4ff; 
@@ -124,7 +103,6 @@ input[type=number] { -moz-appearance: textfield; }
   text-align: center; 
   margin-top: 20px; 
 }
-
 .content {
   padding: 0 18px;
   max-width: 600px; 
@@ -141,16 +119,13 @@ input[type=number] { -moz-appearance: textfield; }
   line-height: 1.5; 
   transition: max-height 0.6s cubic-bezier(0.8, 0, 0.2, 1), padding 0.6s cubic-bezier(0.8, 0, 0.2, 1); 
 }
-
 .content.open {
   max-height: 1000px; 
   padding: 16px 18px 12px 18px; 
 }
-
 .content::-webkit-scrollbar { height: 8px; }
 .content::-webkit-scrollbar-thumb { background: rgba(0,102,255,0.5); border-radius: 4px; }
 .content::-webkit-scrollbar-track { background: rgba(0,30,60,0.2); }
-
 </style>
 </head>
 <body>
@@ -250,9 +225,6 @@ input[type=number] { -moz-appearance: textfield; }
 </div>
 
 <script>
-// --- CORE UTILITY FUNCTIONS ---
-
-// Units
 const units = ["K","M","B","T","Qd","Qn","Sx","Sp","O","N","De","Ud","Dd","TdD","QdD","QnD","SxD","SpD","OcD","NvD","Vgn","UvG","DvG","Tvg","QtV","QnV","SeV","SpG","OvG","NvG","TgN","UTG","DTG","TsTG","QtTG","QnTG","SsTG","SpTG","OcTG","NoTG","QDDR","uQDR","dQDR","tQDR","qdQDR","QnQDR","SxQDR","SpQDR","OQDDR","NQDDR","qQGNT","uQGNT","dQGNT","tQGNT"];
 const unitMap = {}; units.forEach((u,i)=>{ unitMap[u.toLowerCase()]=Math.pow(10,3*(i+1)); });
 
@@ -266,6 +238,7 @@ function parseEnergy(input){
     if(unitMap.hasOwnProperty(u)) return n*unitMap[u]; 
     return 0; 
 }
+
 function formatUnits(value){ 
     for(let i=units.length-1;i>=0;i--){ 
         let uv=Math.pow(10,3*(i+1)); 
@@ -274,13 +247,10 @@ function formatUnits(value){
     return value.toFixed(value >= 1 ? 3 : 6); 
 }
 
-// --- CALCULATION LOGIC ---
-
 function calcPerClick(){ 
     const e=parseEnergy(document.getElementById("pcEnergy").value); 
     const t=parseFloat(document.getElementById("pcTime").value); 
     const out=document.getElementById("output"); 
-
     if(e>0 && t>0){ 
         const eps=e*5.5; 
         const total=eps*t; 
@@ -295,18 +265,14 @@ function calcTarget(){
     const target=parseEnergy(document.getElementById("targetEnergyInput").value); 
     const current=parseEnergy(document.getElementById("currentEnergyTarget").value); 
     const out=document.getElementById("output"); 
-    
     if(e>0 && target>0){ 
         const eps=e*5.5; 
         const remaining=Math.max(target-current, 0); 
-        
         if (remaining === 0) {
             out.innerHTML = `✅ <strong>Target Reached!</strong>`;
             return;
         }
-
         const time=remaining/eps; 
-        
         out.innerHTML=`🎯 <strong>Energy Needed:</strong> ${formatUnits(remaining)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time required:</strong> ${time.toFixed(2)} s`; 
         return;
     } 
@@ -319,9 +285,7 @@ function calcRank(){
     const e=parseEnergy(document.getElementById("rankEnergy").value); 
     const current=parseEnergy(document.getElementById("currentEnergy").value); 
     const out=document.getElementById("output"); 
-
     if(r <= 0 || isNaN(r)) { out.innerHTML="⚠️ Enter a valid Rank number."; return; }
-
     if(!rankEnergyMap[r]){ 
         out.innerHTML=`⚠️ Rank ${r} energy cost not defined. (Only Ranks 116-120 supported)`; 
         return; 
@@ -330,12 +294,10 @@ function calcRank(){
         out.innerHTML="⚠️ Enter valid Energy per Click."; 
         return; 
     } 
-    
     const eps=e*5.5; 
     const req=rankEnergyMap[r]; 
     const remaining=Math.max(req-current,0); 
     const time=remaining/eps; 
-
     out.innerHTML=`🏆 <strong>Rank ${r} Energy Required:</strong> ${formatUnits(req)}<br>⚡ <strong>Energy per second:</strong> ${formatUnits(eps)}<br>⏱️ <strong>Time to reach Rank ${r}:</strong> ${time.toFixed(2)} s`; 
 }
 
@@ -343,7 +305,6 @@ function calcTimeKill(){
   const dps=parseEnergy(document.getElementById("dpsTime").value);
   const health=parseEnergy(document.getElementById("healthTime").value);
   const out=document.getElementById("damageOutput");
-
   if(dps>0 && health>0){
     const time=health/dps;
     out.innerHTML=`🩸 <strong class="damage-output">Time to kill:</strong> <span class="damage-output">${time.toFixed(2)} s</span>`;
@@ -354,20 +315,14 @@ function calcRequiredDps(){
   const time=parseFloat(document.getElementById("desiredTimeDps").value);
   const health=parseEnergy(document.getElementById("healthDps").value);
   const out=document.getElementById("damageOutput");
-
   if(time>0 && health>0){
     const requiredDPS=health/time;
     out.innerHTML=`⚡ <strong class="damage-output">Required DPS for ${time}s:</strong> <span class="damage-output">${formatUnits(requiredDPS)}</span>`;
   } else out.innerHTML="⚠️ Enter valid Mob Health and Desired Time values.";
 }
 
-// --- UX / EVENT LISTENERS ---
-
 function handleInputEvent() {
-    // 1. Save data to Local Storage
     localStorage.setItem(this.id, this.value);
-    
-    // 2. Run the correct calculation based on input's parent tab
     const parentTab = this.closest('.tab-content').id;
     if (parentTab === 'perClickTab') calcPerClick();
     else if (parentTab === 'targetTab') calcTarget();
@@ -377,12 +332,9 @@ function handleInputEvent() {
 }
 
 function handleMobSelection(e) {
-    // Check which select changed
     const isTimeKill = e.target.id === 'mobSelectTime';
     const healthInputId = isTimeKill ? "healthTime" : "healthDps";
     const calcFunction = isTimeKill ? calcTimeKill : calcRequiredDps;
-
-    // Update health field and save
     if(e.target.value) {
         document.getElementById(healthInputId).value = e.target.value;
         localStorage.setItem(healthInputId, e.target.value);
@@ -390,10 +342,7 @@ function handleMobSelection(e) {
     calcFunction();
 }
 
-
-// Function to select the section and tab (handles persistence)
 function selectSectionAndTab(section, tabId) {
-    // 1. Set the main section
     const energySection = document.getElementById("energySection");
     const damageSection = document.getElementById("damageSection");
     const energyBtn = document.getElementById("energyBtn");
@@ -414,7 +363,6 @@ function selectSectionAndTab(section, tabId) {
     const tabContents = document.querySelectorAll(`#${tabsContainerId} .tab-content`);
     const isDamage = section === 'damage';
 
-    // 2. Set the active tab
     tabBtns.forEach(t => t.classList.remove("active-tab", "energy", "damage"));
     tabContents.forEach(c => c.classList.remove("active"));
     
@@ -426,10 +374,8 @@ function selectSectionAndTab(section, tabId) {
         targetTabBtn.classList.add(isDamage ? "damage" : "energy");
         targetTabContent.classList.add("active");
         
-        // Save the *last selected tab for this specific section*
         localStorage.setItem(`${section}Tab`, tabId); 
 
-        // 3. Run the correct calculation for the shown tab
         if(tabId === 'perClickTab') calcPerClick();
         else if(tabId === 'targetTab') calcTarget();
         else if(tabId === 'rankTab') calcRank();
@@ -443,16 +389,13 @@ function setupListeners() {
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     
     inputs.forEach(input => {
-        // --- 1. LOCAL STORAGE: Load Data ---
         const savedValue = localStorage.getItem(input.id);
         if (savedValue !== null) {
             input.value = savedValue;
         }
 
-        // --- 2. REAL-TIME CALCULATION & LOCAL STORAGE: Save Data ---
         input.addEventListener("input", handleInputEvent);
 
-        // --- 3. AESTHETICS: Label Highlighting ---
         const label = document.getElementById(`label-${input.id}`);
         if (label) {
             const isDamage = input.classList.contains('damage-input');
@@ -463,15 +406,12 @@ function setupListeners() {
         }
     });
 
-    // Mob Selection Listeners
     document.getElementById("mobSelectTime").addEventListener("change", handleMobSelection);
     document.getElementById("mobSelectDps").addEventListener("change", handleMobSelection);
     
-    // UI Logic 
     const energyBtn = document.getElementById("energyBtn");
     const damageBtn = document.getElementById("damageBtn");
     
-    // --- UPDATED MAIN BUTTON LISTENERS TO RESTORE LAST TAB FOR THAT SECTION ---
     energyBtn.addEventListener("click",()=>{
         const savedTab = localStorage.getItem('energyTab') || 'perClickTab';
         selectSectionAndTab('energy', savedTab);
@@ -482,7 +422,6 @@ function setupListeners() {
         selectSectionAndTab('damage', savedTab);
     });
 
-    // Tabs generic binding (These call selectSectionAndTab which now saves to 'energyTab' or 'damageTab')
     function setupTabs(tabParentId, isDamage=false){
       const tabBtns = document.querySelectorAll(`#${tabParentId} .tab-btn`);
       const section = isDamage ? 'damage' : 'energy';
@@ -497,7 +436,6 @@ function setupListeners() {
     setupTabs('damageSection', true);
 
 
-    // Collapsibles 
     document.querySelectorAll(".collapsible").forEach(c=>{
       c.addEventListener("click",()=>{ 
         const cont=c.nextElementSibling; 
@@ -505,10 +443,8 @@ function setupListeners() {
       });
     });
 
-    // --- INITIALIZATION ON LOAD ---
     const savedSection = localStorage.getItem('activeSection') || 'energy';
     
-    // Determine the initial tab to load based on the saved section-specific tab, or default
     let initialTab = 'perClickTab';
     if (savedSection === 'energy') {
         initialTab = localStorage.getItem('energyTab') || 'perClickTab';
