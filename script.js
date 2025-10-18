@@ -134,14 +134,10 @@ function calcRequiredDps(){
 }
 
 function handleInputEvent() {
-    // Save non-synced inputs by their ID
-    if (!this.classList.contains('sync-energy')) {
-        localStorage.setItem(this.id, this.value);
-    }
+    localStorage.setItem(this.id, this.value);
     
-    // Sync energy inputs and save to the SINGLE key
     if (this.classList.contains('sync-energy')) {
-        syncEnergyInputs(this.value);
+        syncEnergyInputs(this.value, this.id);
     }
     
     const parentTab = this.closest('.tab-content').id;
@@ -152,14 +148,12 @@ function handleInputEvent() {
     else if (parentTab === 'requiredDpsTab') calcRequiredDps();
 }
 
-function syncEnergyInputs(value) {
-    // *** The single key update is here ***
-    localStorage.setItem('savedEnergyPerClickValue', value);
-    
+function syncEnergyInputs(value, sourceId) {
     const energyInputs = document.querySelectorAll('.sync-energy');
     energyInputs.forEach(input => {
-        if (input.value !== value) {
+        if (input.id !== sourceId && input.value !== value) {
             input.value = value;
+            localStorage.setItem(input.id, value); 
         }
     });
 }
@@ -231,13 +225,8 @@ function setupListeners() {
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     
     inputs.forEach(input => {
-        let savedValue = localStorage.getItem(input.id);
+        const savedValue = localStorage.getItem(input.id);
         
-        if (input.classList.contains('sync-energy')) {
-            // *** Load the value from the SINGLE key ***
-            savedValue = localStorage.getItem('savedEnergyPerClickValue');
-        }
-
         if (savedValue !== null) {
             input.value = savedValue;
         }
@@ -295,7 +284,6 @@ function setupListeners() {
     setupTabs('energySection', false);
     setupTabs('damageSection', true);
 
-
     document.querySelectorAll(".collapsible").forEach(c=>{
       c.addEventListener("click",()=>{ 
         const cont=c.nextElementSibling; 
@@ -304,21 +292,15 @@ function setupListeners() {
     });
 
     const savedSection = localStorage.getItem('activeSection') || 'energy';
-    
-    let initialTab = 'perClickTab';
-    if (savedSection === 'energy') {
-        initialTab = localStorage.getItem('energyTab') || 'perClickTab';
-    } else {
-        initialTab = localStorage.getItem('damageTab') || 'timeKillTab';
-    }
+    let initialTab = (savedSection === 'energy') 
+        ? (localStorage.getItem('energyTab') || 'perClickTab')
+        : (localStorage.getItem('damageTab') || 'timeKillTab');
     
     selectSectionAndTab(savedSection, initialTab); 
     
     const firstEnergyInput = document.querySelector('.sync-energy');
-    if (firstEnergyInput && localStorage.getItem('savedEnergyPerClickValue')) {
-        syncEnergyInputs(localStorage.getItem('savedEnergyPerClickValue'));
-    } else if (firstEnergyInput) {
-        syncEnergyInputs(firstEnergyInput.value);
+    if (firstEnergyInput) {
+        syncEnergyInputs(firstEnergyInput.value, firstEnergyInput.id);
     }
 }
 
