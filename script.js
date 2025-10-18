@@ -129,7 +129,7 @@ function calcRequiredDps(){
   const out=document.getElementById("damageOutput");
   if(time>0 && health>0){
     const requiredDPS=health/time;
-    out.innerHTML=`⚡ <strong class="damage-output">Required DPS for ${time}s:</strong> <span class="damage-output">${formatUnits(requiredDPS)}</span>`;
+    out.innerHTML=`🩸 <strong class="damage-output">Required DPS for ${time}s:</strong> <span class="damage-output">${formatUnits(requiredDPS)}</span>`;
   } else out.innerHTML="⚠️ Enter valid Mob Health and Desired Time values.";
 }
 
@@ -311,3 +311,4 @@ function setupListeners() {
 }
 
 document.addEventListener('DOMContentLoaded', setupListeners);
+
