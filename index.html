@@ -64,16 +64,16 @@ label {
     margin-bottom: 6px; 
     display: block; 
     text-align: center; 
-    transition: color 0.2s ease; /* Transition for label highlighting */
+    transition: color 0.2s ease;
 }
 
 /* New CSS for active label */
 .active-label-color {
-    color: #00ccff; /* Bright color for Energy labels */
+    color: #00ccff;
     text-shadow: 0 0 5px rgba(0,204,255,0.7);
 }
 .active-label-damage {
-    color: #ff5555; /* Bright color for Damage labels */
+    color: #ff5555;
     text-shadow: 0 0 5px rgba(255,85,85,0.7);
 }
 
@@ -126,24 +126,27 @@ input[type=number] { -moz-appearance: textfield; }
 }
 
 .content {
-  padding: 0 18px; 
+  padding: 0 18px; /* Start with no vertical padding */
   max-width: 600px; 
   display: block; 
   overflow: hidden; 
   overflow-x: auto;
   white-space: nowrap;
-  max-height: 0; 
+  max-height: 0; /* Initial state is closed */
   background-color: rgba(0,30,60,0.3);
   border-radius: 14px;
   margin-top: 6px;
   font-size: 1.05rem; 
   text-align: left; 
   line-height: 1.5; 
-  transition: max-height 0.4s ease-out; 
+  /* FIX: Smoother transition, large max-height, and transition padding */
+  transition: max-height 0.6s cubic-bezier(0.8, 0, 0.2, 1), padding 0.6s cubic-bezier(0.8, 0, 0.2, 1); 
 }
 
 .content.open {
-  max-height: 320px; 
+  /* FIX: Use an arbitrarily large max-height to ensure all content fits */
+  max-height: 1000px; 
+  /* Restore vertical padding only when open to avoid jank */
   padding: 16px 18px 12px 18px; 
 }
 
@@ -425,7 +428,7 @@ function setupListeners() {
     const energySection = document.getElementById("energySection");
     const damageSection = document.getElementById("damageSection");
 
-    // FUNCTION TO SELECT THE SECTION AND TAB
+    // FUNCTION TO SELECT THE SECTION AND TAB (handles persistence)
     function selectSectionAndTab(section, tabId) {
         // 1. Set the main section
         if (section === 'energy') {
@@ -499,12 +502,13 @@ function setupListeners() {
     // Default the tab based on the section if no tab is saved, or if saved tab is for the wrong section
     if (savedSection === 'energy') {
         savedTab = savedTab || 'perClickTab';
-        if (savedTab.includes('Kill') || savedTab.includes('Dps')) savedTab = 'perClickTab';
+        if (savedTab && (savedTab.includes('Kill') || savedTab.includes('Dps'))) savedTab = 'perClickTab';
     } else { // damage section
         savedTab = savedTab || 'timeKillTab';
-        if (savedTab.includes('Click') || savedTab.includes('target') || savedTab.includes('rank')) savedTab = 'timeKillTab';
+        if (savedTab && (savedTab.includes('Click') || savedTab.includes('target') || savedTab.includes('rank'))) savedTab = 'timeKillTab';
     }
     
+    // This function handles loading the inputs, setting the active tab, and running the correct calculation.
     selectSectionAndTab(savedSection, savedTab);
 }
 
